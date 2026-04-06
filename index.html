@@ -1350,13 +1350,15 @@
     displayProducts(sorted);
   }
 
+  function stripAccents(str) { return str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+
   function searchProducts(query) {
-    const q = query.toLowerCase().trim();
+    const q = stripAccents(query.toLowerCase().trim());
     if (!q) { displayProducts(originalItems); return; }
     const filtered = originalItems.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q)
+      stripAccents(p.name.toLowerCase()).includes(q) ||
+      stripAccents(p.brand.toLowerCase()).includes(q) ||
+      stripAccents(p.desc.toLowerCase()).includes(q)
     );
     displayProducts(filtered);
   }

@@ -164,6 +164,12 @@
     .mt-16 { margin-top: 16px; }
     .empty-state { text-align: center; padding: 32px; color: var(--gray); font-size: 11px; letter-spacing: 1px; }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_GmuWyO9JLRbEyYwDKh92lg_oLiuKlDu';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 </head>
 <body>
 
@@ -407,33 +413,33 @@
   ══════════════════════════════════════════ */
   function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
-  function loadData() {
+  async function loadData() {
     try {
-      const savedCatalog = localStorage.getItem('milano_catalog');
-      const savedTexts   = localStorage.getItem('milano_texts');
-      catalog = savedCatalog ? JSON.parse(savedCatalog) : deepClone(DEFAULT_CATALOG);
-      texts   = savedTexts   ? JSON.parse(savedTexts)   : deepClone(DEFAULT_TEXTS);
+      const { data: catRow } = await supabase.from('catalog').select('data').eq('id', 1).single();
+      const { data: txtRow } = await supabase.from('texts').select('data').eq('id', 1).single();
+      catalog = (catRow && catRow.data) ? catRow.data : deepClone(DEFAULT_CATALOG);
+      texts   = (txtRow && txtRow.data) ? txtRow.data : deepClone(DEFAULT_TEXTS);
     } catch(e) {
       catalog = deepClone(DEFAULT_CATALOG);
       texts   = deepClone(DEFAULT_TEXTS);
     }
   }
 
-  function saveAll() {
-    // Collect current form values before saving
+  async function saveAll() {
     collectFormValues();
-    localStorage.setItem('milano_catalog', JSON.stringify(catalog));
-    localStorage.setItem('milano_texts',   JSON.stringify(texts));
+    await supabase.from('catalog').update({ data: catalog, updated_at: new Date().toISOString() }).eq('id', 1);
+    await supabase.from('texts').update({ data: texts, updated_at: new Date().toISOString() }).eq('id', 1);
     showToast('✓ Cambios guardados correctamente');
   }
 
-  function resetAll() {
+  async function resetAll() {
     if (!confirm('¿Resetear todo a los valores originales? Se perderán todos los cambios.')) return;
-    localStorage.removeItem('milano_catalog');
-    localStorage.removeItem('milano_texts');
-    loadData();
-    renderSection(activeSection);
-    showToast('↺ Valores restaurados');
+    await supabase.from('catalog').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
+    await supabase.from('texts').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
+    loadData().then(() => {
+      renderSection(activeSection);
+      showToast('↺ Valores restaurados');
+    });
   }
 
   function openSite() {
@@ -791,8 +797,7 @@
   /* ══════════════════════════════════════════
      INIT
   ══════════════════════════════════════════ */
-  loadData();
-  renderSection('general');
+  loadData().then(() => renderSection('general'));
   </script>
 </body>
 </html>

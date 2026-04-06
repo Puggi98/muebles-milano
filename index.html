@@ -247,6 +247,12 @@
       .hero-announce .label { font-size: 13px; }
     }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_GmuWyO9JLRbEyYwDKh92lg_oLiuKlDu';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 </head>
 <body>
 
@@ -802,13 +808,12 @@
     }
   };
 
-  // ── Cargar overrides del admin (localStorage) ──
-  (function() {
+  // ── Cargar overrides del admin (Supabase) ──
+  async function loadCatalogFromSupabase() {
     try {
-      const savedCat = localStorage.getItem('milano_catalog');
-      if (savedCat) {
-        const overrides = JSON.parse(savedCat);
-        // Deep merge: apply saved subcategories and heroImg per category
+      const { data: catRow } = await supabase.from('catalog').select('data').eq('id', 1).single();
+      if (catRow && catRow.data) {
+        const overrides = catRow.data;
         for (const [catKey, catData] of Object.entries(overrides)) {
           if (!catalog[catKey]) continue;
           if (catData.heroImg) catalog[catKey].heroImg = catData.heroImg;
@@ -824,39 +829,29 @@
         }
       }
     } catch(e) {}
-  })();
+  }
 
-  // Poblar marcas
-  (function() {
+  // ── Inicialización async: cargar datos de Supabase ──
+  function poblarMarcas() {
     const brandMap = { cassina:'Cassina', 'bb-italia':'B&B Italia', knoll:'Knoll', 'fritz-hansen':'Fritz Hansen' };
     const all = [];
     for (const cat of Object.values(catalog)) for (const sub of Object.values(cat.subcategories)) if (sub.items) all.push(...sub.items);
     for (const [key, brand] of Object.entries(brandMap)) catalog.marcas.subcategories[key].items = all.filter(p => p.brand === brand);
-  })();
+  }
 
-  // ── Aplicar textos guardados del admin ──
-  (function() {
-    try {
-      const savedTexts = localStorage.getItem('milano_texts');
-      if (!savedTexts) return;
-      const t = JSON.parse(savedTexts);
-      if (t.announceBar)     document.getElementById('announceBar').textContent    = t.announceBar;
-      if (t.heroImg)         document.getElementById('heroImgEl').src               = t.heroImg;
-      if (t.heroPromoLabel)  document.getElementById('heroPromoLabel').textContent  = t.heroPromoLabel;
-      if (t.heroPromoSub)    document.getElementById('heroPromoSub').textContent    = t.heroPromoSub;
-      if (t.promoBannerLabel) document.getElementById('promoBannerLabel').textContent = t.promoBannerLabel;
-      if (t.promoBannerTitle) document.getElementById('promoBannerTitle').textContent = t.promoBannerTitle;
-      if (t.promoBannerDesc)  document.getElementById('promoBannerDesc').textContent  = t.promoBannerDesc;
-    } catch(e) {}
-  })();
-
-  // ── Aplicar imágenes de tarjetas de subcategoría ──
-  (function() {
+  function aplicarImagenes() {
     document.querySelectorAll('[data-cat][data-sub]').forEach(img => {
       const cat = img.dataset.cat, sub = img.dataset.sub;
       const homeImg = catalog[cat] && catalog[cat].subcategories[sub] && catalog[cat].subcategories[sub].homeImg;
       if (homeImg) img.src = homeImg;
     });
+  }
+
+  (async function initFromSupabase() {
+    await loadCatalogFromSupabase();
+    poblarMarcas();
+    await loadTextsFromSupabase();
+    aplicarImagenes();
   })();
 
   /* ══════════════════════════════════════════

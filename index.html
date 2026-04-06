@@ -336,6 +336,12 @@
 
     .products-section { padding: 60px 60px 80px; background: var(--white); }
     .products-meta { font-size: 11px; letter-spacing: 2px; color: var(--gray-text); margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; max-width: 1260px; margin-left: auto; margin-right: auto; margin-bottom: 36px; }
+    .products-meta-right { display: flex; align-items: center; gap: 12px; }
+    .search-box { position: relative; }
+    .search-box-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--text-gray); fill: none; stroke-width: 1.8; pointer-events: none; }
+    .search-box input { font-family: var(--font-sans); font-size: 11px; letter-spacing: .5px; color: var(--primary-dark); border: 1px solid var(--border-gray); padding: 8px 14px 8px 32px; background: var(--white); border-radius: 4px; width: 200px; transition: border-color .2s; }
+    .search-box input:focus { outline: none; border-color: var(--gold); }
+    .search-box input::placeholder { color: var(--text-gray); }
     .sort-select { font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--primary-dark); border: 1px solid var(--border-gray); padding: 8px 14px; background: var(--white); cursor: pointer; border-radius: 4px; }
     .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; max-width: 1260px; margin: 0 auto; }
     .product-card { cursor: pointer; }
@@ -489,6 +495,10 @@
       .benefits-bar { grid-template-columns: 1fr 1fr; }
       .benefit-item { border-right: none; border-bottom: 1px solid var(--border-gray); }
       .products-section { padding: 32px 18px 52px; }
+      .products-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .products-meta-right { width: 100%; }
+      .search-box { flex: 1; }
+      .search-box input { width: 100%; }
       .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
       .site-footer { padding: 44px 22px 0; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
@@ -964,12 +974,18 @@
     <section class="products-section">
       <div class="products-meta">
         <span id="productCount"></span>
-        <select class="sort-select" onchange="sortProducts(this.value)">
-          <option value="">ORDENAR POR</option>
-          <option value="asc">PRECIO: MENOR A MAYOR</option>
-          <option value="desc">PRECIO: MAYOR A MENOR</option>
-          <option value="name">NOMBRE A-Z</option>
-        </select>
+        <div class="products-meta-right">
+          <div class="search-box">
+            <svg class="search-box-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+            <input type="text" id="productSearch" placeholder="Buscar producto..." oninput="searchProducts(this.value)" />
+          </div>
+          <select class="sort-select" onchange="sortProducts(this.value)">
+            <option value="">ORDENAR POR</option>
+            <option value="asc">PRECIO: MENOR A MAYOR</option>
+            <option value="desc">PRECIO: MAYOR A MENOR</option>
+            <option value="name">NOMBRE A-Z</option>
+          </select>
+        </div>
       </div>
       <div class="products-grid" id="productsGrid"></div>
     </section>
@@ -1271,6 +1287,8 @@
 
     renderTabs(catData);
     renderProducts(catData.subcategories[activeSub].items);
+    const searchEl = document.getElementById('productSearch');
+    if (searchEl) searchEl.value = '';
     window.scrollTo(0, 0);
   }
 
@@ -1321,6 +1339,17 @@
     if (val === 'desc') sorted.sort((a,b) => b.price - a.price);
     if (val === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
     renderProducts(sorted);
+  }
+
+  function searchProducts(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { renderProducts(baseItems); return; }
+    const filtered = baseItems.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.brand.toLowerCase().includes(q) ||
+      p.desc.toLowerCase().includes(q)
+    );
+    renderProducts(filtered);
   }
 
   /* ══════════════════════════════════════════

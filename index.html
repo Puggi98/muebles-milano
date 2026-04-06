@@ -279,6 +279,9 @@
       position: absolute; top: 12px; left: 12px; background: var(--gold); color: var(--white);
       font-size: 9px; letter-spacing: 2px; padding: 4px 12px; font-weight: 600;
     }
+    .showcase-badge-sold-out { background: #999; }
+    .showcase-card.out-of-stock { opacity: .45; }
+    .showcase-card.out-of-stock:hover .showcase-card-img img { transform: none; }
     .showcase-info { padding: 14px 0 0; }
     .showcase-brand { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
     .showcase-name { font-size: 14px; letter-spacing: .3px; margin: 6px 0 4px; color: var(--primary-dark); font-weight: 500; }
@@ -340,6 +343,9 @@
     .product-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
     .product-card:hover .product-card-img img { transform: scale(1.05); }
     .product-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: var(--white); font-size: 9px; letter-spacing: 2px; padding: 4px 12px; font-weight: 600; }
+    .product-badge-sold-out { background: #999; }
+    .product-card.out-of-stock { opacity: .45; }
+    .product-card.out-of-stock:hover .product-card-img img { transform: none; }
     .product-info { padding: 14px 0 0; }
     .product-brand { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
     .product-name  { font-size: 14px; letter-spacing: .3px; margin: 6px 0 4px; color: var(--primary-dark); font-weight: 500; }
@@ -1289,20 +1295,24 @@
     baseItems = [...items];
     const grid = document.getElementById('productsGrid');
     document.getElementById('productCount').textContent = items.length + ' PRODUCTO' + (items.length !== 1 ? 'S' : '');
-    grid.innerHTML = items.map((p, i) => `
-      <div class="product-card">
+    grid.innerHTML = items.map((p, i) => {
+      const outOfStock = (p.stock != null && p.stock <= 0);
+      return `
+      <div class="product-card${outOfStock ? ' out-of-stock' : ''}">
         <div class="product-card-img">
           <img src="${p.img}" alt="${p.name}" loading="lazy" />
-          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+          ${outOfStock ? '<span class="product-badge product-badge-sold-out">AGOTADO</span>' : (p.badge ? `<span class="product-badge">${p.badge}</span>` : '')}
         </div>
         <div class="product-info">
           <div class="product-brand">${p.brand}</div>
           <div class="product-name">${p.name}</div>
           <div class="product-desc">${p.desc}</div>
           <div class="product-price">$${p.price.toLocaleString('es-MX')}</div>
-          <button class="add-cart-btn" onclick="addToCart(${i})">AGREGAR AL CARRITO</button>
+          ${outOfStock
+            ? '<button class="add-cart-btn" disabled style="opacity:.5;cursor:not-allowed">AGOTADO</button>'
+            : `<button class="add-cart-btn" onclick="addToCart(${i})">AGREGAR AL CARRITO</button>`}
         </div>
-      </div>`).join('');
+      </div>`}).join('');
   }
 
   function sortProducts(val) {
@@ -1352,6 +1362,7 @@
   function addToCart(idx) {
     const p = baseItems[idx];
     if (!p) return;
+    if (p.stock != null && p.stock <= 0) return;
     const key = p.brand + '|' + p.name;
     const existing = cart.find(i => i.key === key);
     if (existing) { existing.qty++; }
@@ -1455,22 +1466,24 @@
     filtered = filtered.slice(0, 8);
 
     const grid = document.getElementById('showcaseGrid');
-    grid.innerHTML = filtered.map((p, i) => `
-      <div class="showcase-card reveal">
+    grid.innerHTML = filtered.map((p, i) => {
+      const outOfStock = (p.stock != null && p.stock <= 0);
+      return `
+      <div class="showcase-card reveal${outOfStock ? ' out-of-stock' : ''}">
         <div class="showcase-card-img">
           <img src="${p.img}" alt="${p.name}" loading="lazy" />
-          ${p.badge ? `<span class="showcase-badge">${p.badge}</span>` : ''}
-          <div class="showcase-card-hover">
+          ${outOfStock ? '<span class="showcase-badge showcase-badge-sold-out">AGOTADO</span>' : (p.badge ? `<span class="showcase-badge">${p.badge}</span>` : '')}
+          ${!outOfStock ? `<div class="showcase-card-hover">
             <button class="quick-view" aria-label="Vista rapida"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button>
             <button class="add-btn" onclick="event.stopPropagation();showcaseAddToCart(${i},'${type}')">AGREGAR</button>
-          </div>
+          </div>` : ''}
         </div>
         <div class="showcase-info">
           <div class="showcase-brand">${p.brand}</div>
           <div class="showcase-name">${p.name}</div>
           <div class="showcase-price">$${p.price.toLocaleString('es-MX')}</div>
         </div>
-      </div>`).join('');
+      </div>`}).join('');
 
     // Re-observe new elements
     initRevealObserver();

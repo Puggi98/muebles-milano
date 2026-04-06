@@ -6,61 +6,101 @@
   <title>Muebles Milano – Muebles & Interiorismo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --olive: #8c8b68; --olive-bright: #a3a27c;
-      --navy: #1b2140;  --navy-dark: #131929;
-      --white: #ffffff; --gray-light: #f4f4f2; --gray-mid: #888;
-      --font-sans: 'Montserrat', sans-serif;
+      --primary-dark: #232323;
+      --secondary-dark: #1a1a1a;
+      --white: #ffffff;
+      --gold: #c9a96e;
+      --gold-hover: #b8963e;
+      --gray-text: #828282;
+      --light-bg: #f7f6f3;
+      --border-gray: #e8e8e5;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
       --font-serif: 'Cormorant Garamond', serif;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-sans); color: var(--navy); background: var(--white); }
+    body { font-family: var(--font-sans); color: var(--primary-dark); background: var(--white); }
 
     /* ── ANNOUNCE BAR ── */
-    .announce-bar { background: var(--navy-dark); color: var(--white); text-align: center; padding: 9px 20px; font-size: 11px; letter-spacing: 2.5px; font-weight: 300; }
+    .announce-bar { background: var(--secondary-dark); color: var(--white); text-align: center; padding: 10px 20px; font-size: 11px; letter-spacing: 2px; font-weight: 300; }
 
-    /* ── HEADER HERO (flotante) ── */
-    .site-header-hero {
-      position: absolute; top: 36px; left: 0; right: 0;
-      z-index: 100; display: flex; flex-direction: column;
-      align-items: center; padding: 24px 48px 0;
+    /* ── HEADER (shared base) ── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 72px;
+      transition: background .35s, box-shadow .35s, border-color .35s;
     }
-
-    /* ── HEADER SÓLIDO (en vistas internas) ── */
-    .site-header-solid {
-      background: var(--navy-dark);
-      display: flex; flex-direction: column;
-      align-items: center; padding: 20px 48px 0;
-      position: sticky; top: 0; z-index: 100;
+    .site-header.header-transparent {
+      background: transparent; border-bottom: 1px solid rgba(255,255,255,.15);
     }
+    .site-header.header-transparent .logo-name,
+    .site-header.header-transparent .nav-item > a,
+    .site-header.header-transparent .nav-item > button { color: var(--white); }
+    .site-header.header-transparent .header-icons svg { stroke: var(--white); }
+    .site-header.header-transparent .hamburger-btn svg { stroke: var(--white); }
 
-    .header-top { width: 100%; display: flex; align-items: center; justify-content: space-between; }
-    .header-icons { display: flex; align-items: center; gap: 22px; }
+    .site-header.header-solid-white {
+      background: var(--white); border-bottom: 1px solid var(--border-gray);
+      box-shadow: 0 1px 12px rgba(0,0,0,.06);
+    }
+    .site-header.header-solid-white .logo-name { color: var(--primary-dark); }
+    .site-header.header-solid-white .nav-item > a,
+    .site-header.header-solid-white .nav-item > button { color: var(--primary-dark); }
+    .site-header.header-solid-white .header-icons svg { stroke: var(--primary-dark); }
+    .site-header.header-solid-white .hamburger-btn svg { stroke: var(--primary-dark); }
+    .site-header.header-solid-white .nav-item > button svg,
+    .site-header.header-solid-white .nav-item > a svg { stroke: var(--primary-dark); }
+
+    /* Category view always solid */
+    .site-header-cat {
+      position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 72px;
+      background: var(--white); border-bottom: 1px solid var(--border-gray);
+      box-shadow: 0 1px 12px rgba(0,0,0,.06);
+    }
+    .site-header-cat .logo-name { color: var(--primary-dark); }
+    .site-header-cat .nav-item > a,
+    .site-header-cat .nav-item > button { color: var(--primary-dark); }
+    .site-header-cat .header-icons svg { stroke: var(--primary-dark); }
+    .site-header-cat .hamburger-btn svg { stroke: var(--primary-dark); }
+    .site-header-cat .nav-item > button svg,
+    .site-header-cat .nav-item > a svg { stroke: var(--primary-dark); }
+
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-center { display: flex; align-items: center; gap: 0; }
+    .header-right { display: flex; align-items: center; gap: 18px; }
+
+    .header-icons { display: flex; align-items: center; gap: 18px; }
     .header-icons button { background: none; border: none; cursor: pointer; display: flex; align-items: center; padding: 4px; }
-    .header-icons svg { width: 20px; height: 20px; stroke: var(--white); fill: none; stroke-width: 1.5; }
+    .header-icons svg { width: 20px; height: 20px; stroke: var(--primary-dark); fill: none; stroke-width: 1.5; transition: stroke .3s; }
 
-    .logo-wrap { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
-    .logo-icon { width: 50px; height: 50px; flex-shrink: 0; }
-    .logo-name { color: var(--white); font-size: 24px; font-weight: 700; letter-spacing: 4px; line-height: 1; }
-    .logo-sub  { color: rgba(255,255,255,.7); font-size: 8.5px; font-weight: 300; letter-spacing: 2.5px; }
+    .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
+    .logo-icon { width: 42px; height: 42px; flex-shrink: 0; }
+    .logo-icon path { transition: stroke .3s; }
+    .header-transparent .logo-icon path { stroke: var(--gold); }
+    .header-solid-white .logo-icon path,
+    .site-header-cat .logo-icon path { stroke: var(--gold); }
+    .logo-name { font-size: 20px; font-weight: 700; letter-spacing: 4px; line-height: 1; transition: color .3s; }
 
     /* ── NAV ── */
-    .site-nav { margin-top: 18px; width: 100%; display: flex; justify-content: center; border-top: 1px solid rgba(255,255,255,.18); padding-top: 13px; }
+    .site-nav { display: flex; align-items: center; gap: 0; }
     .nav-item { position: relative; }
     .nav-item > a, .nav-item > button {
-      color: var(--white); text-decoration: none; background: none; border: none;
-      font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; font-weight: 400;
-      padding: 6px 14px; display: flex; align-items: center; gap: 4px;
-      white-space: nowrap; cursor: pointer; transition: opacity .2s;
+      text-decoration: none; background: none; border: none;
+      font-family: var(--font-sans); font-size: 11px; letter-spacing: 1.5px; font-weight: 500;
+      padding: 8px 14px; display: flex; align-items: center; gap: 4px;
+      white-space: nowrap; cursor: pointer; transition: color .25s, opacity .25s;
     }
-    .nav-item > a:hover, .nav-item > button:hover { opacity: .65; }
-    .nav-item > button svg, .nav-item > a svg { width: 9px; height: 9px; stroke: var(--white); fill: none; stroke-width: 2; }
-    .dropdown { display: none; position: absolute; top: 100%; left: 0; background: var(--white); min-width: 190px; box-shadow: 0 8px 32px rgba(0,0,0,.14); z-index: 200; padding: 10px 0; }
-    .dropdown button { display: block; width: 100%; text-align: left; padding: 10px 22px; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; color: var(--navy); background: none; border: none; cursor: pointer; transition: background .15s, color .15s; }
-    .dropdown button:hover { background: var(--gray-light); color: var(--olive); }
+    .nav-item > a:hover, .nav-item > button:hover { opacity: .6; }
+    .nav-item > button svg, .nav-item > a svg { width: 9px; height: 9px; fill: none; stroke-width: 2; transition: stroke .3s; }
+    .dropdown { display: none; position: absolute; top: 100%; left: 0; background: var(--white); min-width: 200px; box-shadow: 0 12px 40px rgba(0,0,0,.12); z-index: 200; padding: 12px 0; border-radius: 4px; }
+    .dropdown button { display: block; width: 100%; text-align: left; padding: 10px 24px; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1px; color: var(--primary-dark); background: none; border: none; cursor: pointer; transition: background .15s, color .15s; }
+    .dropdown button:hover { background: var(--light-bg); color: var(--gold); }
     .nav-item:hover .dropdown { display: block; }
 
     /* ── VISTAS ── */
@@ -69,106 +109,307 @@
 
     /* ── HERO ── */
     .hero { position: relative; width: 100%; height: 100vh; min-height: 620px; overflow: hidden; }
-    .hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: brightness(.55); }
-    .hero-announce { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(19,25,41,.93); display: flex; align-items: center; justify-content: space-between; padding: 28px 64px; }
-    .hero-announce .label { font-size: 20px; letter-spacing: 4px; color: var(--olive-bright); font-weight: 500; display: block; }
-    .hero-announce .sublabel { font-size: 13px; letter-spacing: 5px; color: var(--olive); font-weight: 300; display: block; margin-top: 5px; }
-    .btn-cta { background: var(--olive-bright); color: var(--white); border: none; padding: 14px 38px; border-radius: 40px; font-size: 10px; letter-spacing: 3px; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: background .2s, transform .2s; }
-    .btn-cta:hover { background: #b8b78e; transform: scale(1.03); }
+    .hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+    .hero-content {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; gap: 20px;
+      padding: 0 24px;
+    }
+    .hero-gold-label {
+      font-size: 12px; letter-spacing: 4px; color: var(--gold); font-weight: 500;
+      animation: heroFadeUp .8s ease .2s both;
+    }
+    .hero-heading {
+      font-family: var(--font-serif); font-size: clamp(36px, 5vw, 64px); color: var(--white);
+      font-weight: 300; line-height: 1.15; max-width: 700px; letter-spacing: 1px;
+      animation: heroFadeUp .8s ease .4s both;
+    }
+    .hero-sub {
+      font-size: 14px; color: rgba(255,255,255,.7); letter-spacing: 1px; max-width: 440px; line-height: 1.8;
+      animation: heroFadeUp .8s ease .6s both;
+    }
+    .btn-cta {
+      background: var(--gold); color: var(--white); border: none; padding: 16px 42px;
+      border-radius: 40px; font-size: 11px; letter-spacing: 3px; font-weight: 600;
+      cursor: pointer; font-family: var(--font-sans); transition: background .25s, transform .25s;
+      animation: heroFadeUp .8s ease .8s both;
+    }
+    .btn-cta:hover { background: var(--gold-hover); transform: scale(1.03); }
 
-    /* ── HOME SECTIONS ── */
-    .cat-section { padding: 72px 64px 80px; }
-    .cat-section:nth-of-type(odd)  { background: var(--white); }
-    .cat-section:nth-of-type(even) { background: var(--gray-light); }
-    .cat-section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; padding-bottom: 16px; border-bottom: 1px solid #e0e0dc; max-width: 1300px; margin-left: auto; margin-right: auto; }
-    .cat-section-header h2 { font-size: 13px; letter-spacing: 6px; font-weight: 500; color: var(--navy); }
-    .cat-section-header button.ver-todo { font-size: 9px; letter-spacing: 2px; color: var(--olive); background: none; border: none; cursor: pointer; font-family: var(--font-sans); transition: color .2s; }
-    .cat-section-header button.ver-todo:hover { color: var(--navy); }
-    .cat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; max-width: 1300px; margin: 0 auto; }
-    .cat-cards.cols-3 { grid-template-columns: repeat(3,1fr); }
-    .cat-card { display: block; text-decoration: none; cursor: pointer; background: none; border: none; text-align: left; padding: 0; }
-    .cat-card-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
-    .cat-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
-    .cat-card:hover .cat-card-img img { transform: scale(1.06); }
-    .cat-card span { display: block; font-size: 10px; letter-spacing: 3px; color: var(--navy); font-weight: 500; padding: 12px 0 0; font-family: var(--font-sans); transition: color .2s; }
-    .cat-card:hover span { color: var(--olive); }
+    /* Keep IDs for promo overlay at bottom of hero */
+    .hero-promo-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(26,26,26,.92); display: flex; align-items: center;
+      justify-content: space-between; padding: 26px 64px;
+    }
+    .hero-promo-bar .label { font-size: 18px; letter-spacing: 3px; color: var(--gold); font-weight: 500; display: block; }
+    .hero-promo-bar .sublabel { font-size: 12px; letter-spacing: 4px; color: rgba(201,169,110,.7); font-weight: 300; display: block; margin-top: 4px; }
+
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MARQUEE / TICKER ── */
+    .marquee-section { background: var(--secondary-dark); overflow: hidden; padding: 14px 0; }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marqueeScroll 28s linear infinite;
+    }
+    .marquee-track span {
+      font-size: 12px; letter-spacing: 2.5px; color: var(--gold); font-weight: 400;
+      white-space: nowrap; padding: 0 24px;
+    }
+    .marquee-track .dot { color: rgba(201,169,110,.4); padding: 0 8px; }
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION SHARED ── */
+    .section-padding { padding: 80px 64px; }
+    .section-title-wrap { text-align: center; margin-bottom: 48px; }
+    .section-title-wrap .gold-line { width: 40px; height: 2px; background: var(--gold); margin: 0 auto 18px; }
+    .section-title-wrap h2 {
+      font-family: var(--font-serif); font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 300; color: var(--primary-dark); letter-spacing: 1px;
+    }
+    .section-title-wrap p { font-size: 13px; color: var(--gray-text); margin-top: 10px; letter-spacing: .5px; }
+
+    /* ── FEATURED CATEGORIES GRID ── */
+    .feat-cats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      max-width: 1260px; margin: 0 auto;
+    }
+    .feat-cat-card {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 1/1; border: none; background: none; padding: 0; display: block;
+    }
+    .feat-cat-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s ease;
+    }
+    .feat-cat-card:hover img { transform: scale(1.08); }
+    .feat-cat-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.3);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .3s;
+    }
+    .feat-cat-card:hover .feat-cat-overlay { background: rgba(0,0,0,.5); }
+    .feat-cat-overlay span {
+      color: var(--white); font-size: 13px; letter-spacing: 4px; font-weight: 600;
+    }
+
+    /* ── ASYMMETRIC BANNERS ── */
+    .asym-banners {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      max-width: 1260px; margin: 0 auto;
+    }
+    .asym-banner {
+      position: relative; overflow: hidden; cursor: pointer;
+      border: none; background: none; padding: 0; display: block;
+    }
+    .asym-banner img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s ease;
+    }
+    .asym-banner:hover img { transform: scale(1.06); }
+    .asym-banner-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.35);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+      transition: background .3s;
+    }
+    .asym-banner:hover .asym-banner-overlay { background: rgba(0,0,0,.5); }
+    .asym-banner-overlay h3 {
+      font-family: var(--font-serif); font-size: clamp(22px, 3vw, 36px);
+      color: var(--white); font-weight: 300; letter-spacing: 2px;
+    }
+    .asym-banner-overlay .explore-btn {
+      background: none; border: 1px solid rgba(255,255,255,.6); color: var(--white);
+      padding: 10px 28px; font-size: 10px; letter-spacing: 3px; font-family: var(--font-sans);
+      cursor: pointer; transition: background .25s, color .25s;
+    }
+    .asym-banner-overlay .explore-btn:hover { background: var(--white); color: var(--primary-dark); }
+    .asym-left { grid-row: span 2; }
+    .asym-right-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── PRODUCTS SHOWCASE WITH TABS ── */
+    .showcase-tabs { display: flex; justify-content: center; gap: 32px; margin-bottom: 40px; }
+    .showcase-tab-btn {
+      background: none; border: none; cursor: pointer; font-family: var(--font-sans);
+      font-size: 12px; letter-spacing: 2.5px; color: var(--gray-text); font-weight: 500;
+      padding: 8px 4px; border-bottom: 2px solid transparent; transition: color .25s, border-color .25s;
+    }
+    .showcase-tab-btn:hover { color: var(--primary-dark); }
+    .showcase-tab-btn.active { color: var(--primary-dark); border-bottom-color: var(--gold); }
+
+    .showcase-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 24px;
+      max-width: 1260px; margin: 0 auto;
+    }
+    .showcase-card { cursor: pointer; text-decoration: none; }
+    .showcase-card-img {
+      position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--light-bg);
+    }
+    .showcase-card-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .5s ease;
+    }
+    .showcase-card:hover .showcase-card-img img { transform: scale(1.06); }
+    .showcase-card-hover {
+      position: absolute; inset: 0; background: rgba(0,0,0,.25);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      opacity: 0; transition: opacity .3s;
+    }
+    .showcase-card:hover .showcase-card-hover { opacity: 1; }
+    .showcase-card-hover .quick-view {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--white);
+      display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;
+    }
+    .showcase-card-hover .quick-view svg { width: 18px; height: 18px; stroke: var(--primary-dark); fill: none; stroke-width: 1.5; }
+    .showcase-card-hover .add-btn {
+      background: var(--white); color: var(--primary-dark); border: none; padding: 10px 22px;
+      font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; cursor: pointer;
+      transition: background .2s, color .2s; font-weight: 600;
+    }
+    .showcase-card-hover .add-btn:hover { background: var(--gold); color: var(--white); }
+    .showcase-badge {
+      position: absolute; top: 12px; left: 12px; background: var(--gold); color: var(--white);
+      font-size: 9px; letter-spacing: 2px; padding: 4px 12px; font-weight: 600;
+    }
+    .showcase-info { padding: 14px 0 0; }
+    .showcase-brand { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+    .showcase-name { font-size: 14px; letter-spacing: .3px; margin: 6px 0 4px; color: var(--primary-dark); font-weight: 500; }
+    .showcase-price { font-size: 14px; color: var(--primary-dark); font-weight: 600; }
 
     /* ── PROMO BANNER ── */
-    .promo-banner { background: var(--navy-dark); color: var(--white); display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 76px 40px; text-align: center; gap: 20px; }
-    .promo-label { font-size: 10px; letter-spacing: 5px; color: var(--olive-bright); font-weight: 400; }
-    .promo-banner h2 { font-size: clamp(28px,4vw,54px); letter-spacing: 5px; font-weight: 300; font-family: var(--font-serif); }
-    .promo-banner p { font-size: 12px; letter-spacing: 1.5px; color: rgba(255,255,255,.6); max-width: 480px; line-height: 2.2; }
-    .btn-outline { border: 1px solid rgba(255,255,255,.5); color: var(--white); background: none; padding: 14px 42px; font-size: 10px; letter-spacing: 3px; font-family: var(--font-sans); cursor: pointer; transition: background .2s, color .2s; margin-top: 10px; }
-    .btn-outline:hover { background: var(--white); color: var(--navy); }
+    .promo-banner {
+      background: var(--secondary-dark); color: var(--white); display: flex; align-items: center;
+      justify-content: center; flex-direction: column; padding: 88px 40px; text-align: center; gap: 20px;
+    }
+    .promo-label { font-size: 11px; letter-spacing: 5px; color: var(--gold); font-weight: 500; }
+    .promo-banner h2 { font-size: clamp(28px,4vw,52px); letter-spacing: 2px; font-weight: 300; font-family: var(--font-serif); }
+    .promo-banner p { font-size: 13px; letter-spacing: .5px; color: rgba(255,255,255,.55); max-width: 500px; line-height: 2; }
+    .btn-outline {
+      border: 1px solid rgba(255,255,255,.4); color: var(--white); background: none;
+      padding: 14px 42px; font-size: 11px; letter-spacing: 3px; font-family: var(--font-sans);
+      cursor: pointer; transition: background .25s, color .25s; margin-top: 10px; font-weight: 500;
+    }
+    .btn-outline:hover { background: var(--white); color: var(--primary-dark); }
+
+    /* ── BENEFITS BAR ── */
+    .benefits-bar {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+      border-top: 1px solid var(--border-gray); border-bottom: 1px solid var(--border-gray);
+    }
+    .benefit-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 40px 20px; gap: 14px; text-align: center;
+      border-right: 1px solid var(--border-gray);
+    }
+    .benefit-item:last-child { border-right: none; }
+    .benefit-item svg { width: 32px; height: 32px; stroke: var(--gold); fill: none; stroke-width: 1.3; }
+    .benefit-item h4 { font-size: 12px; letter-spacing: 2px; font-weight: 600; color: var(--primary-dark); }
+    .benefit-item p { font-size: 12px; color: var(--gray-text); line-height: 1.6; }
+
+    /* ── HOME SECTIONS (legacy cat-cards for data-attributes) ── */
+    .home-cat-imgs { display: none; }
 
     /* ── CATEGORY VIEW ── */
-    .cat-hero { position: relative; height: 240px; overflow: hidden; }
-    .cat-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.45); }
+    .cat-hero { position: relative; height: 260px; overflow: hidden; }
+    .cat-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.4); }
     .cat-hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-    .cat-breadcrumb { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,.6); }
-    .cat-breadcrumb button { background: none; border: none; color: rgba(255,255,255,.6); cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; }
+    .cat-breadcrumb { font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,.6); }
+    .cat-breadcrumb button { background: none; border: none; color: rgba(255,255,255,.6); cursor: pointer; font-family: var(--font-sans); font-size: 11px; letter-spacing: 2px; }
     .cat-breadcrumb button:hover { color: var(--white); }
-    .cat-view-title { font-size: clamp(28px,4vw,52px); font-family: var(--font-serif); color: var(--white); letter-spacing: 6px; font-weight: 300; }
+    .cat-view-title { font-size: clamp(28px,4vw,52px); font-family: var(--font-serif); color: var(--white); letter-spacing: 4px; font-weight: 300; }
 
-    .tab-bar { display: flex; justify-content: center; border-bottom: 1px solid #e0e0dc; background: var(--white); padding: 0 40px; flex-wrap: wrap; }
-    .tab-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2.5px; color: var(--gray-mid); padding: 18px 20px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; white-space: nowrap; }
-    .tab-btn:hover { color: var(--navy); }
-    .tab-btn.active { color: var(--navy); border-bottom-color: var(--olive-bright); font-weight: 500; }
+    .tab-bar { display: flex; justify-content: center; border-bottom: 1px solid var(--border-gray); background: var(--white); padding: 0 40px; flex-wrap: wrap; }
+    .tab-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 11px; letter-spacing: 2px; color: var(--gray-text); padding: 18px 22px; border-bottom: 2px solid transparent; transition: color .25s, border-color .25s; white-space: nowrap; font-weight: 500; }
+    .tab-btn:hover { color: var(--primary-dark); }
+    .tab-btn.active { color: var(--primary-dark); border-bottom-color: var(--gold); font-weight: 600; }
 
     .products-section { padding: 60px 60px 80px; background: var(--white); }
-    .products-meta { font-size: 10px; letter-spacing: 2px; color: var(--gray-mid); margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; max-width: 1300px; margin-left: auto; margin-right: auto; margin-bottom: 36px; }
-    .sort-select { font-family: var(--font-sans); font-size: 10px; letter-spacing: 1px; color: var(--navy); border: 1px solid #ddd; padding: 6px 12px; background: var(--white); cursor: pointer; }
-    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; max-width: 1300px; margin: 0 auto; }
+    .products-meta { font-size: 11px; letter-spacing: 2px; color: var(--gray-text); margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; max-width: 1260px; margin-left: auto; margin-right: auto; margin-bottom: 36px; }
+    .sort-select { font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--primary-dark); border: 1px solid var(--border-gray); padding: 8px 14px; background: var(--white); cursor: pointer; border-radius: 4px; }
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; max-width: 1260px; margin: 0 auto; }
     .product-card { cursor: pointer; }
-    .product-card-img { position: relative; overflow: hidden; aspect-ratio: 3/3.5; background: var(--gray-light); }
+    .product-card-img { position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--light-bg); }
     .product-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
     .product-card:hover .product-card-img img { transform: scale(1.05); }
-    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--olive-bright); color: var(--white); font-size: 8px; letter-spacing: 2px; padding: 4px 10px; }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: var(--white); font-size: 9px; letter-spacing: 2px; padding: 4px 12px; font-weight: 600; }
     .product-info { padding: 14px 0 0; }
-    .product-brand { font-size: 9px; letter-spacing: 2px; color: var(--olive); text-transform: uppercase; }
-    .product-name  { font-size: 13px; letter-spacing: .5px; margin: 5px 0 4px; color: var(--navy); }
-    .product-desc  { font-size: 10px; color: var(--gray-mid); letter-spacing: .5px; line-height: 1.7; margin-bottom: 8px; }
-    .product-price { font-size: 13px; color: var(--navy); font-weight: 500; }
+    .product-brand { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+    .product-name  { font-size: 14px; letter-spacing: .3px; margin: 6px 0 4px; color: var(--primary-dark); font-weight: 500; }
+    .product-desc  { font-size: 12px; color: var(--gray-text); letter-spacing: .3px; line-height: 1.7; margin-bottom: 8px; }
+    .product-price { font-size: 14px; color: var(--primary-dark); font-weight: 600; }
 
     /* ── FOOTER ── */
-    .site-footer { background: var(--navy-dark); color: rgba(255,255,255,.65); padding: 64px 64px 32px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 52px; }
-    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-    .footer-logo-icon { width: 38px; height: 38px; }
+    .site-footer { background: var(--secondary-dark); color: rgba(255,255,255,.6); padding: 72px 64px 0; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.3fr; gap: 48px; margin-bottom: 56px; }
+    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .footer-logo-icon { width: 36px; height: 36px; }
     .footer-logo-name { color: var(--white); font-size: 15px; font-weight: 700; letter-spacing: 3px; display: block; line-height: 1; }
-    .footer-logo-sub  { color: rgba(255,255,255,.45); font-size: 8px; letter-spacing: 2px; font-weight: 300; }
-    .footer-brand p { font-size: 11px; letter-spacing: .5px; line-height: 2.1; max-width: 260px; }
-    .footer-col h4 { font-size: 10px; letter-spacing: 3px; color: var(--white); margin-bottom: 18px; font-weight: 500; }
-    .footer-col button { display: block; font-size: 11px; color: rgba(255,255,255,.55); background: none; border: none; cursor: pointer; font-family: var(--font-sans); margin-bottom: 10px; letter-spacing: .5px; transition: color .2s; text-align: left; }
-    .footer-col button:hover { color: var(--white); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; font-size: 10px; letter-spacing: 1px; display: flex; justify-content: space-between; color: rgba(255,255,255,.35); }
+    .footer-logo-sub  { color: rgba(255,255,255,.4); font-size: 8px; letter-spacing: 2px; font-weight: 300; }
+    .footer-brand p { font-size: 13px; letter-spacing: .3px; line-height: 1.9; max-width: 280px; margin-bottom: 20px; }
+    .footer-social { display: flex; gap: 14px; }
+    .footer-social a {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center; transition: border-color .25s, background .25s;
+    }
+    .footer-social a:hover { border-color: var(--gold); background: rgba(201,169,110,.15); }
+    .footer-social svg { width: 16px; height: 16px; fill: rgba(255,255,255,.6); }
+    .footer-social a:hover svg { fill: var(--gold); }
+    .footer-col h4 { font-size: 12px; letter-spacing: 3px; color: var(--white); margin-bottom: 22px; font-weight: 600; }
+    .footer-col button { display: block; font-size: 13px; color: rgba(255,255,255,.5); background: none; border: none; cursor: pointer; font-family: var(--font-sans); margin-bottom: 12px; letter-spacing: .3px; transition: color .2s; text-align: left; }
+    .footer-col button:hover { color: var(--gold); }
+    .footer-newsletter p { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.8; margin-bottom: 16px; }
+    .footer-newsletter-form { display: flex; gap: 0; }
+    .footer-newsletter-form input {
+      flex: 1; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+      border-right: none; padding: 12px 16px; color: var(--white); font-family: var(--font-sans);
+      font-size: 12px; outline: none; transition: border-color .2s;
+    }
+    .footer-newsletter-form input::placeholder { color: rgba(255,255,255,.3); }
+    .footer-newsletter-form input:focus { border-color: var(--gold); }
+    .footer-newsletter-form button {
+      background: var(--gold); color: var(--white); border: none; padding: 12px 20px;
+      font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; cursor: pointer;
+      font-weight: 600; transition: background .2s;
+    }
+    .footer-newsletter-form button:hover { background: var(--gold-hover); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: 24px 0; margin-top: 8px; font-size: 11px; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,.3); }
+    .payment-icons { display: flex; gap: 10px; align-items: center; }
+    .payment-icons svg { width: 36px; height: 22px; fill: rgba(255,255,255,.25); }
 
     /* ── HAMBURGER & CART BADGE ── */
-    .hamburger-btn { display: none; }
+    .hamburger-btn { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
     .cart-btn { position: relative; }
-    .cart-count { position: absolute; top: -5px; right: -7px; background: var(--olive-bright); color: var(--white); font-size: 8px; width: 17px; height: 17px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 600; }
+    .cart-count { position: absolute; top: -5px; right: -7px; background: var(--gold); color: var(--white); font-size: 8px; width: 17px; height: 17px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700; }
 
-    /* ── MOBILE DRAWER (menú) ── */
+    /* ── MOBILE DRAWER (menu) ── */
     .mob-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 500; }
     .mob-overlay.open { display: block; }
     .mob-drawer {
-      position: fixed; top: 0; left: 0; width: 300px; height: 100vh; max-width: 85vw;
-      background: var(--navy); z-index: 600; overflow-y: auto;
+      position: fixed; top: 0; left: 0; width: 320px; height: 100vh; max-width: 85vw;
+      background: var(--secondary-dark); z-index: 600; overflow-y: auto;
       transform: translateX(-100%); transition: transform .3s ease; display: flex; flex-direction: column;
     }
     .mob-drawer.open { transform: translateX(0); }
-    .mob-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px; border-bottom: 1px solid rgba(255,255,255,.1); }
-    .mob-drawer-header span { font-size: 9px; letter-spacing: 3px; color: var(--white); font-weight: 500; }
-    .mob-close { background: none; border: none; color: rgba(255,255,255,.55); font-size: 24px; cursor: pointer; line-height: 1; }
-    .mob-cat { border-bottom: 1px solid rgba(255,255,255,.07); }
-    .mob-cat-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 22px; background: none; border: none; color: rgba(255,255,255,.7); font-family: var(--font-sans); font-size: 10px; letter-spacing: 2.5px; cursor: pointer; font-weight: 400; text-align: left; }
+    .mob-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 24px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .mob-drawer-header span { font-size: 10px; letter-spacing: 3px; color: var(--white); font-weight: 600; }
+    .mob-close { background: none; border: none; color: rgba(255,255,255,.5); font-size: 24px; cursor: pointer; line-height: 1; }
+    .mob-cat { border-bottom: 1px solid rgba(255,255,255,.06); }
+    .mob-cat-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: none; border: none; color: rgba(255,255,255,.65); font-family: var(--font-sans); font-size: 11px; letter-spacing: 2.5px; cursor: pointer; font-weight: 500; text-align: left; }
     .mob-cat-btn:hover { color: var(--white); }
     .mob-cat-btn svg { width: 9px; height: 9px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .2s; flex-shrink: 0; }
     .mob-cat-btn.open svg { transform: rotate(180deg); }
-    .mob-subs { display: none; background: rgba(0,0,0,.25); }
+    .mob-subs { display: none; background: rgba(0,0,0,.2); }
     .mob-subs.open { display: block; }
-    .mob-subs button { display: block; width: 100%; text-align: left; padding: 11px 22px 11px 36px; background: none; border: none; color: rgba(255,255,255,.45); font-family: var(--font-sans); font-size: 10px; letter-spacing: 1.5px; cursor: pointer; transition: color .15s; }
-    .mob-subs button:hover { color: var(--olive-bright); }
+    .mob-subs button { display: block; width: 100%; text-align: left; padding: 12px 24px 12px 38px; background: none; border: none; color: rgba(255,255,255,.4); font-family: var(--font-sans); font-size: 11px; letter-spacing: 1.5px; cursor: pointer; transition: color .15s; }
+    .mob-subs button:hover { color: var(--gold); }
 
     /* ── CART DRAWER ── */
     .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; }
@@ -179,72 +420,86 @@
       transform: translateX(100%); transition: transform .3s ease; display: flex; flex-direction: column;
     }
     .cart-drawer.open { transform: translateX(0); }
-    .cart-drawer-hdr { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid #e0e0dc; }
-    .cart-drawer-hdr h3 { font-size: 11px; letter-spacing: 3px; font-weight: 500; color: var(--navy); }
-    .cart-x { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--gray-mid); line-height: 1; }
+    .cart-drawer-hdr { display: flex; align-items: center; justify-content: space-between; padding: 22px 24px; border-bottom: 1px solid var(--border-gray); }
+    .cart-drawer-hdr h3 { font-size: 12px; letter-spacing: 3px; font-weight: 600; color: var(--primary-dark); }
+    .cart-x { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--gray-text); line-height: 1; }
     .cart-items-scroll { flex: 1; overflow-y: auto; }
-    .cart-item { display: flex; gap: 14px; padding: 18px 24px; border-bottom: 1px solid #f0f0ec; }
-    .cart-item-img { width: 70px; height: 70px; object-fit: cover; flex-shrink: 0; border-radius: 2px; background: var(--gray-light); }
+    .cart-item { display: flex; gap: 14px; padding: 18px 24px; border-bottom: 1px solid var(--border-gray); }
+    .cart-item-img { width: 72px; height: 72px; object-fit: cover; flex-shrink: 0; border-radius: 4px; background: var(--light-bg); }
     .cart-item-info { flex: 1; min-width: 0; }
-    .cart-item-brand { font-size: 9px; letter-spacing: 1.5px; color: var(--olive); margin-bottom: 3px; }
-    .cart-item-name { font-size: 12px; color: var(--navy); line-height: 1.4; }
-    .cart-item-price { font-size: 12px; color: var(--navy); font-weight: 500; margin-top: 5px; }
+    .cart-item-brand { font-size: 10px; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 3px; }
+    .cart-item-name { font-size: 13px; color: var(--primary-dark); line-height: 1.4; font-weight: 500; }
+    .cart-item-price { font-size: 13px; color: var(--primary-dark); font-weight: 600; margin-top: 5px; }
     .cart-item-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-    .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; background: none; cursor: pointer; font-size: 14px; color: var(--navy); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); }
-    .qty-val { font-size: 12px; min-width: 18px; text-align: center; }
+    .qty-btn { width: 28px; height: 28px; border: 1px solid var(--border-gray); background: none; cursor: pointer; font-size: 14px; color: var(--primary-dark); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); }
+    .qty-val { font-size: 13px; min-width: 18px; text-align: center; font-weight: 500; }
     .cart-rm { margin-left: auto; background: none; border: none; cursor: pointer; color: #ccc; font-size: 18px; transition: color .15s; line-height: 1; }
     .cart-rm:hover { color: #c0392b; }
-    .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gray-mid); gap: 12px; }
+    .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gray-text); gap: 12px; }
     .cart-empty svg { width: 42px; height: 42px; stroke: #ccc; fill: none; }
-    .cart-empty p { font-size: 10px; letter-spacing: 2px; }
-    .cart-ftr { padding: 20px 24px; border-top: 1px solid #e0e0dc; background: var(--gray-light); }
+    .cart-empty p { font-size: 11px; letter-spacing: 2px; }
+    .cart-ftr { padding: 20px 24px; border-top: 1px solid var(--border-gray); background: var(--light-bg); }
     .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .cart-total-row span { font-size: 10px; letter-spacing: 2px; color: var(--navy); font-weight: 500; }
-    .cart-checkout { width: 100%; background: var(--navy-dark); color: var(--white); border: none; padding: 16px; font-family: var(--font-sans); font-size: 10px; letter-spacing: 3px; cursor: pointer; transition: background .2s; }
-    .cart-checkout:hover { background: var(--navy); }
+    .cart-total-row span { font-size: 11px; letter-spacing: 2px; color: var(--primary-dark); font-weight: 600; }
+    .cart-checkout { width: 100%; background: var(--primary-dark); color: var(--white); border: none; padding: 16px; font-family: var(--font-sans); font-size: 11px; letter-spacing: 3px; cursor: pointer; transition: background .2s; font-weight: 600; border-radius: 4px; }
+    .cart-checkout:hover { background: var(--gold); }
 
-    /* ── PRODUCT ADD-TO-CART BUTTON ── */
-    .add-cart-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--navy-dark); color: var(--white); border: none; font-family: var(--font-sans); font-size: 9px; letter-spacing: 2px; cursor: pointer; opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s, background .2s; }
+    /* ── PRODUCT ADD-TO-CART BUTTON (cat view) ── */
+    .add-cart-btn { width: 100%; margin-top: 10px; padding: 11px; background: var(--primary-dark); color: var(--white); border: none; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; cursor: pointer; opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s, background .25s; font-weight: 600; border-radius: 4px; }
     .product-card:hover .add-cart-btn { opacity: 1; transform: translateY(0); }
-    .add-cart-btn:hover { background: var(--olive); }
+    .add-cart-btn:hover { background: var(--gold); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .cat-section { padding: 56px 40px 60px; }
+      .section-padding { padding: 60px 40px; }
+      .feat-cats-grid { grid-template-columns: repeat(2, 1fr); }
+      .showcase-grid { grid-template-columns: repeat(3, 1fr); }
       .products-grid { grid-template-columns: repeat(3,1fr); }
+      .benefits-bar { grid-template-columns: repeat(2,1fr); }
+      .benefit-item:nth-child(2) { border-right: none; }
     }
     @media (max-width: 768px) {
       .announce-bar { font-size: 9px; letter-spacing: 1px; padding: 8px 14px; }
-      .site-header-hero { padding: 12px 18px 0; top: 34px; }
-      .site-header-solid { padding: 12px 18px 0; }
+      .site-header, .site-header-cat { padding: 0 18px; height: 60px; }
       .site-nav { display: none; }
       .hamburger-btn { display: flex; }
       .account-btn { display: none; }
-      .logo-name { font-size: 18px; letter-spacing: 3px; }
-      .logo-sub { display: none; }
-      .logo-icon { width: 34px; height: 34px; }
+      .logo-name { font-size: 16px; letter-spacing: 3px; }
+      .logo-icon { width: 32px; height: 32px; }
       .hero { height: 100svh; min-height: 560px; }
-      .hero-announce { flex-direction: column; gap: 14px; padding: 20px 22px; text-align: center; }
-      .hero-announce .label { font-size: 15px; letter-spacing: 2px; }
-      .cat-section { padding: 40px 18px 48px; }
-      .cat-section-header { flex-direction: column; gap: 6px; align-items: flex-start; }
-      .cat-cards { grid-template-columns: repeat(2,1fr); gap: 10px; }
-      .cat-cards.cols-3 { grid-template-columns: repeat(2,1fr); }
-      .promo-banner { padding: 50px 22px; }
+      .hero-promo-bar { flex-direction: column; gap: 14px; padding: 20px 22px; text-align: center; }
+      .hero-promo-bar .label { font-size: 14px; letter-spacing: 2px; }
+      .section-padding { padding: 48px 18px; }
+      .feat-cats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .asym-banners { grid-template-columns: 1fr; }
+      .asym-left { grid-row: auto; }
+      .asym-right-wrap { flex-direction: column; }
+      .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .promo-banner { padding: 56px 22px; }
+      .benefits-bar { grid-template-columns: 1fr 1fr; }
+      .benefit-item { border-right: none; border-bottom: 1px solid var(--border-gray); }
       .products-section { padding: 32px 18px 52px; }
       .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
-      .site-footer { padding: 44px 22px 22px; }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; }
-      .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+      .site-footer { padding: 44px 22px 0; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
       .tab-bar { padding: 0 16px; }
-      .tab-btn { padding: 14px 12px; font-size: 9px; }
-      .cat-hero { height: 180px; }
+      .tab-btn { padding: 14px 12px; font-size: 10px; }
+      .cat-hero { height: 200px; }
+      .marquee-section { padding: 12px 0; }
     }
     @media (max-width: 480px) {
-      .cat-cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .feat-cats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .showcase-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
       .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
       .footer-grid { grid-template-columns: 1fr; }
-      .hero-announce .label { font-size: 13px; }
+      .benefits-bar { grid-template-columns: 1fr; }
+      .benefit-item { border-right: none; }
+      .hero-promo-bar .label { font-size: 12px; }
     }
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -256,14 +511,14 @@
 </head>
 <body>
 
-  <div id="announceBar" class="announce-bar">ENVÍO GRATIS EN PEDIDOS MAYORES A $2,000 &nbsp;|&nbsp; VISITA NUESTRA SALA DE EXPOSICIÓN</div>
+  <div id="announceBar" class="announce-bar">ENVIO GRATIS EN PEDIDOS MAYORES A $2,000 &nbsp;|&nbsp; VISITA NUESTRA SALA DE EXPOSICION</div>
 
   <!-- ── MOBILE MENU DRAWER ── -->
   <div class="mob-overlay" id="mobOverlay" onclick="closeMobMenu()"></div>
-  <div class="mob-drawer" id="mobDrawer" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+  <div class="mob-drawer" id="mobDrawer" role="dialog" aria-modal="true" aria-label="Menu de navegacion">
     <div class="mob-drawer-header">
-      <span>MENÚ</span>
-      <button class="mob-close" onclick="closeMobMenu()" aria-label="Cerrar menú">×</button>
+      <span>MENU</span>
+      <button class="mob-close" onclick="closeMobMenu()" aria-label="Cerrar menu">&times;</button>
     </div>
     <nav>
       <div class="mob-cat">
@@ -271,7 +526,7 @@
       </div>
       <div class="mob-cat">
         <button class="mob-cat-btn" onclick="toggleMobCat(this)">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
-        <div class="mob-subs"><button onclick="closeMobMenu();openCat('sala','sofas')">Sofás</button><button onclick="closeMobMenu();openCat('sala','sillones')">Sillones</button><button onclick="closeMobMenu();openCat('sala','mesas-centro')">Mesas de Centro</button><button onclick="closeMobMenu();openCat('sala','estanterias')">Estanterías</button></div>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('sala','sofas')">Sofas</button><button onclick="closeMobMenu();openCat('sala','sillones')">Sillones</button><button onclick="closeMobMenu();openCat('sala','mesas-centro')">Mesas de Centro</button><button onclick="closeMobMenu();openCat('sala','estanterias')">Estanterias</button></div>
       </div>
       <div class="mob-cat">
         <button class="mob-cat-btn" onclick="toggleMobCat(this)">COMEDOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
@@ -279,18 +534,18 @@
       </div>
       <div class="mob-cat">
         <button class="mob-cat-btn" onclick="toggleMobCat(this)">DORMITORIO <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
-        <div class="mob-subs"><button onclick="closeMobMenu();openCat('dormitorio','camas')">Camas</button><button onclick="closeMobMenu();openCat('dormitorio','mesitas')">Mesitas de Noche</button><button onclick="closeMobMenu();openCat('dormitorio','comodas')">Cómodas</button><button onclick="closeMobMenu();openCat('dormitorio','armarios')">Armarios</button></div>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('dormitorio','camas')">Camas</button><button onclick="closeMobMenu();openCat('dormitorio','mesitas')">Mesitas de Noche</button><button onclick="closeMobMenu();openCat('dormitorio','comodas')">Comodas</button><button onclick="closeMobMenu();openCat('dormitorio','armarios')">Armarios</button></div>
       </div>
       <div class="mob-cat">
-        <button class="mob-cat-btn" onclick="toggleMobCat(this)">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
-        <div class="mob-subs"><button onclick="closeMobMenu();openCat('iluminacion','pie')">Lámparas de Pie</button><button onclick="closeMobMenu();openCat('iluminacion','mesa')">Lámparas de Mesa</button><button onclick="closeMobMenu();openCat('iluminacion','colgantes')">Colgantes</button></div>
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">ILUMINACION <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('iluminacion','pie')">Lamparas de Pie</button><button onclick="closeMobMenu();openCat('iluminacion','mesa')">Lamparas de Mesa</button><button onclick="closeMobMenu();openCat('iluminacion','colgantes')">Colgantes</button></div>
       </div>
       <div class="mob-cat">
         <button class="mob-cat-btn" onclick="toggleMobCat(this)">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
-        <div class="mob-subs"><button onclick="closeMobMenu();openCat('exterior','jardin')">Muebles de Jardín</button><button onclick="closeMobMenu();openCat('exterior','tumbonas')">Tumbonas</button><button onclick="closeMobMenu();openCat('exterior','mesas-ext')">Mesas Exterior</button></div>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('exterior','jardin')">Muebles de Jardin</button><button onclick="closeMobMenu();openCat('exterior','tumbonas')">Tumbonas</button><button onclick="closeMobMenu();openCat('exterior','mesas-ext')">Mesas Exterior</button></div>
       </div>
       <div class="mob-cat">
-        <button class="mob-cat-btn" onclick="closeMobMenu()">QUIÉNES SOMOS</button>
+        <button class="mob-cat-btn" onclick="closeMobMenu()">QUIENES SOMOS</button>
       </div>
     </nav>
   </div>
@@ -300,7 +555,7 @@
   <div class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
     <div class="cart-drawer-hdr">
       <h3>CARRITO</h3>
-      <button class="cart-x" onclick="closeCart()" aria-label="Cerrar carrito">×</button>
+      <button class="cart-x" onclick="closeCart()" aria-label="Cerrar carrito">&times;</button>
     </div>
     <div class="cart-items-scroll" id="cartItemsWrap"></div>
     <div class="cart-ftr" id="cartFtr">
@@ -317,37 +572,31 @@
   ══════════════════════════════════════════ -->
   <div id="view-home" class="view active">
 
-    <!-- HERO con header flotante -->
+    <!-- HERO with overlay header -->
     <section class="hero">
       <img id="heroImgEl" class="hero-bg" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&auto=format&fit=crop&q=80" alt="Sala moderna Muebles Milano" />
+      <div class="hero-overlay"></div>
 
-      <header class="site-header-hero">
-        <div class="header-top">
-          <div class="header-icons">
-            <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="22" height="22" stroke="white" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-            <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
-          </div>
+      <header id="homeHeader" class="site-header header-transparent">
+        <div class="header-left">
+          <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
           <div class="logo-wrap" onclick="goHome()">
             <svg class="logo-icon" viewBox="0 0 60 60" fill="none">
-              <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
-              <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
             </svg>
-            <div><div class="logo-name">MUEBLES MILANO</div><div class="logo-sub">muebles & interiorismo</div></div>
-          </div>
-          <div class="header-icons">
-            <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
-            <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+            <div class="logo-name">MUEBLES MILANO</div>
           </div>
         </div>
-        <nav class="site-nav" id="nav-home">
+        <nav class="site-nav header-center" id="nav-home">
           <div class="nav-item"><button onclick="openCat('sala')">NUEVO</button></div>
           <div class="nav-item">
             <button onclick="openCat('sala')">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
             <div class="dropdown">
-              <button onclick="openCat('sala','sofas')">Sofás</button>
+              <button onclick="openCat('sala','sofas')">Sofas</button>
               <button onclick="openCat('sala','sillones')">Sillones</button>
               <button onclick="openCat('sala','mesas-centro')">Mesas de Centro</button>
-              <button onclick="openCat('sala','estanterias')">Estanterías</button>
+              <button onclick="openCat('sala','estanterias')">Estanterias</button>
             </div>
           </div>
           <div class="nav-item">
@@ -363,22 +612,22 @@
             <div class="dropdown">
               <button onclick="openCat('dormitorio','camas')">Camas</button>
               <button onclick="openCat('dormitorio','mesitas')">Mesitas de Noche</button>
-              <button onclick="openCat('dormitorio','comodas')">Cómodas</button>
+              <button onclick="openCat('dormitorio','comodas')">Comodas</button>
               <button onclick="openCat('dormitorio','armarios')">Armarios</button>
             </div>
           </div>
           <div class="nav-item">
-            <button onclick="openCat('iluminacion')">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <button onclick="openCat('iluminacion')">ILUMINACION <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
             <div class="dropdown">
-              <button onclick="openCat('iluminacion','pie')">Lámparas de Pie</button>
-              <button onclick="openCat('iluminacion','mesa')">Lámparas de Mesa</button>
+              <button onclick="openCat('iluminacion','pie')">Lamparas de Pie</button>
+              <button onclick="openCat('iluminacion','mesa')">Lamparas de Mesa</button>
               <button onclick="openCat('iluminacion','colgantes')">Colgantes</button>
             </div>
           </div>
           <div class="nav-item">
             <button onclick="openCat('exterior')">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
             <div class="dropdown">
-              <button onclick="openCat('exterior','jardin')">Muebles de Jardín</button>
+              <button onclick="openCat('exterior','jardin')">Muebles de Jardin</button>
               <button onclick="openCat('exterior','tumbonas')">Tumbonas</button>
               <button onclick="openCat('exterior','mesas-ext')">Mesas Exterior</button>
             </div>
@@ -387,107 +636,198 @@
             <button onclick="openCat('marcas')">MARCAS <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
             <div class="dropdown">
               <button onclick="openCat('marcas','cassina')">Cassina</button>
-              <button onclick="openCat('marcas','bb-italia')">B&B Italia</button>
+              <button onclick="openCat('marcas','bb-italia')">B&amp;B Italia</button>
               <button onclick="openCat('marcas','knoll')">Knoll</button>
               <button onclick="openCat('marcas','fritz-hansen')">Fritz Hansen</button>
             </div>
           </div>
-          <div class="nav-item"><button>QUIÉNES SOMOS</button></div>
+          <div class="nav-item"><button>QUIENES SOMOS</button></div>
         </nav>
+        <div class="header-right header-icons">
+          <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+          <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+          <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+        </div>
       </header>
 
-      <div class="hero-announce">
+      <div class="hero-content">
+        <span class="hero-gold-label">COLECCION 2026</span>
+        <h1 class="hero-heading">Diseno que transforma tu hogar</h1>
+        <p class="hero-sub">Muebles de autor que combinan artesania italiana con estetica contemporanea</p>
+        <button class="btn-cta" onclick="openCat('sala')">EXPLORAR COLECCION</button>
+      </div>
+
+      <div class="hero-promo-bar">
         <div>
-          <span id="heroPromoLabel" class="label">VENTA DE SOFÁS CAMA EN CUERO</span>
+          <span id="heroPromoLabel" class="label">VENTA DE SOFAS CAMA EN CUERO</span>
           <span id="heroPromoSub" class="sublabel">ACTIVA AHORA</span>
         </div>
         <button class="btn-cta" onclick="openCat('sala','sofas')">COMPRAR AHORA</button>
       </div>
     </section>
 
-    <!-- SALA -->
-    <section class="cat-section">
-      <div class="cat-section-header">
-        <h2>SALA DE ESTAR</h2>
-        <button class="ver-todo" onclick="openCat('sala')">Ver colección completa →</button>
-      </div>
-      <div class="cat-cards">
-        <button class="cat-card" onclick="openCat('sala','sofas')"><div class="cat-card-img"><img data-cat="sala" data-sub="sofas" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&auto=format&fit=crop&q=80" alt="Sofás"/></div><span>SOFÁS</span></button>
-        <button class="cat-card" onclick="openCat('sala','sillones')"><div class="cat-card-img"><img data-cat="sala" data-sub="sillones" src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&auto=format&fit=crop&q=80" alt="Sillones"/></div><span>SILLONES</span></button>
-        <button class="cat-card" onclick="openCat('sala','mesas-centro')"><div class="cat-card-img"><img data-cat="sala" data-sub="mesas-centro" src="https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=700&auto=format&fit=crop&q=80" alt="Mesas de Centro"/></div><span>MESAS DE CENTRO</span></button>
-        <button class="cat-card" onclick="openCat('sala','estanterias')"><div class="cat-card-img"><img data-cat="sala" data-sub="estanterias" src="https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=700&auto=format&fit=crop&q=80" alt="Estanterías"/></div><span>ESTANTERÍAS</span></button>
-      </div>
-    </section>
-
-    <!-- COMEDOR -->
-    <section class="cat-section">
-      <div class="cat-section-header">
-        <h2>COMEDOR</h2>
-        <button class="ver-todo" onclick="openCat('comedor')">Ver colección completa →</button>
-      </div>
-      <div class="cat-cards cols-3">
-        <button class="cat-card" onclick="openCat('comedor','mesas')"><div class="cat-card-img"><img data-cat="comedor" data-sub="mesas" src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=700&auto=format&fit=crop&q=80" alt="Mesas"/></div><span>MESAS DE COMEDOR</span></button>
-        <button class="cat-card" onclick="openCat('comedor','sillas')"><div class="cat-card-img"><img data-cat="comedor" data-sub="sillas" src="https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=700&auto=format&fit=crop&q=80" alt="Sillas"/></div><span>SILLAS</span></button>
-        <button class="cat-card" onclick="openCat('comedor','aparadores')"><div class="cat-card-img"><img data-cat="comedor" data-sub="aparadores" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&auto=format&fit=crop&q=80" alt="Aparadores"/></div><span>APARADORES</span></button>
+    <!-- MARQUEE TICKER -->
+    <section class="marquee-section">
+      <div class="marquee-track">
+        <span>Envio gratis en pedidos +$2,000</span><span class="dot">&bull;</span>
+        <span>Visita nuestra sala de exposicion</span><span class="dot">&bull;</span>
+        <span>Diseno italiano premium</span><span class="dot">&bull;</span>
+        <span>Asesoria personalizada gratuita</span><span class="dot">&bull;</span>
+        <span>Envio gratis en pedidos +$2,000</span><span class="dot">&bull;</span>
+        <span>Visita nuestra sala de exposicion</span><span class="dot">&bull;</span>
+        <span>Diseno italiano premium</span><span class="dot">&bull;</span>
+        <span>Asesoria personalizada gratuita</span><span class="dot">&bull;</span>
+        <span>Envio gratis en pedidos +$2,000</span><span class="dot">&bull;</span>
+        <span>Visita nuestra sala de exposicion</span><span class="dot">&bull;</span>
+        <span>Diseno italiano premium</span><span class="dot">&bull;</span>
+        <span>Asesoria personalizada gratuita</span><span class="dot">&bull;</span>
       </div>
     </section>
 
-    <!-- DORMITORIO -->
-    <section class="cat-section">
-      <div class="cat-section-header">
-        <h2>DORMITORIO</h2>
-        <button class="ver-todo" onclick="openCat('dormitorio')">Ver colección completa →</button>
+    <!-- FEATURED CATEGORIES -->
+    <section class="section-padding" style="background: var(--white);">
+      <div class="section-title-wrap reveal">
+        <div class="gold-line"></div>
+        <h2>Categorias Destacadas</h2>
+        <p>Explora nuestras colecciones curadas para cada espacio</p>
       </div>
-      <div class="cat-cards">
-        <button class="cat-card" onclick="openCat('dormitorio','camas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="camas" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700&auto=format&fit=crop&q=80" alt="Camas"/></div><span>CAMAS</span></button>
-        <button class="cat-card" onclick="openCat('dormitorio','mesitas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="mesitas" src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&auto=format&fit=crop&q=80" alt="Mesitas"/></div><span>MESITAS DE NOCHE</span></button>
-        <button class="cat-card" onclick="openCat('dormitorio','comodas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="comodas" src="https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=700&auto=format&fit=crop&q=80" alt="Cómodas"/></div><span>CÓMODAS</span></button>
-        <button class="cat-card" onclick="openCat('dormitorio','armarios')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="armarios" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&auto=format&fit=crop&q=80" alt="Armarios"/></div><span>ARMARIOS</span></button>
-      </div>
-    </section>
-
-    <section class="promo-banner">
-      <span id="promoBannerLabel" class="promo-label">COLECCIÓN EXCLUSIVA</span>
-      <h2 id="promoBannerTitle">DISEÑO SIN COMPROMISO</h2>
-      <p id="promoBannerDesc">Cada pieza seleccionada para elevar tu espacio. Calidad artesanal, diseño intemporal.</p>
-      <button class="btn-outline" onclick="openCat('sala')">EXPLORAR COLECCIÓN</button>
-    </section>
-
-    <!-- ILUMINACIÓN -->
-    <section class="cat-section">
-      <div class="cat-section-header">
-        <h2>ILUMINACIÓN</h2>
-        <button class="ver-todo" onclick="openCat('iluminacion')">Ver colección completa →</button>
-      </div>
-      <div class="cat-cards cols-3">
-        <button class="cat-card" onclick="openCat('iluminacion','pie')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="pie" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80" alt="Pie"/></div><span>LÁMPARAS DE PIE</span></button>
-        <button class="cat-card" onclick="openCat('iluminacion','mesa')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="mesa" src="https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=700&auto=format&fit=crop&q=80" alt="Mesa"/></div><span>LÁMPARAS DE MESA</span></button>
-        <button class="cat-card" onclick="openCat('iluminacion','colgantes')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="colgantes" src="https://images.unsplash.com/photo-1540039155733-44a4b5b58abb?w=700&auto=format&fit=crop&q=80" alt="Colgantes"/></div><span>COLGANTES</span></button>
-      </div>
-    </section>
-
-    <!-- EXTERIOR -->
-    <section class="cat-section">
-      <div class="cat-section-header">
-        <h2>EXTERIOR</h2>
-        <button class="ver-todo" onclick="openCat('exterior')">Ver colección completa →</button>
-      </div>
-      <div class="cat-cards cols-3">
-        <button class="cat-card" onclick="openCat('exterior','jardin')"><div class="cat-card-img"><img data-cat="exterior" data-sub="jardin" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format&fit=crop&q=80" alt="Jardín"/></div><span>MUEBLES DE JARDÍN</span></button>
-        <button class="cat-card" onclick="openCat('exterior','tumbonas')"><div class="cat-card-img"><img data-cat="exterior" data-sub="tumbonas" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=700&auto=format&fit=crop&q=80" alt="Tumbonas"/></div><span>TUMBONAS</span></button>
-        <button class="cat-card" onclick="openCat('exterior','mesas-ext')"><div class="cat-card-img"><img data-cat="exterior" data-sub="mesas-ext" src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=700&auto=format&fit=crop&q=80" alt="Mesas Ext"/></div><span>MESAS EXTERIOR</span></button>
+      <div class="feat-cats-grid">
+        <button class="feat-cat-card reveal" onclick="openCat('sala')">
+          <img data-cat="sala" data-sub="sofas" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&auto=format&fit=crop&q=80" alt="Sala" />
+          <div class="feat-cat-overlay"><span>SALA</span></div>
+        </button>
+        <button class="feat-cat-card reveal" onclick="openCat('comedor')">
+          <img data-cat="comedor" data-sub="mesas" src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=700&auto=format&fit=crop&q=80" alt="Comedor" />
+          <div class="feat-cat-overlay"><span>COMEDOR</span></div>
+        </button>
+        <button class="feat-cat-card reveal" onclick="openCat('dormitorio')">
+          <img data-cat="dormitorio" data-sub="camas" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700&auto=format&fit=crop&q=80" alt="Dormitorio" />
+          <div class="feat-cat-overlay"><span>DORMITORIO</span></div>
+        </button>
+        <button class="feat-cat-card reveal" onclick="openCat('iluminacion')">
+          <img data-cat="iluminacion" data-sub="pie" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80" alt="Iluminacion" />
+          <div class="feat-cat-overlay"><span>ILUMINACION</span></div>
+        </button>
+        <button class="feat-cat-card reveal" onclick="openCat('exterior')">
+          <img data-cat="exterior" data-sub="jardin" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format&fit=crop&q=80" alt="Exterior" />
+          <div class="feat-cat-overlay"><span>EXTERIOR</span></div>
+        </button>
+        <button class="feat-cat-card reveal" onclick="openCat('marcas')">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&auto=format&fit=crop&q=80" alt="Marcas" />
+          <div class="feat-cat-overlay"><span>MARCAS</span></div>
+        </button>
       </div>
     </section>
 
+    <!-- ASYMMETRIC BANNERS -->
+    <section class="section-padding" style="background: var(--light-bg);">
+      <div class="asym-banners">
+        <button class="asym-banner asym-left reveal" onclick="openCat('sala')">
+          <img data-cat="sala" data-sub="sillones" src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=900&auto=format&fit=crop&q=80" alt="Sala de Estar" style="min-height:100%;" />
+          <div class="asym-banner-overlay">
+            <h3>Sala de Estar</h3>
+            <span class="explore-btn">EXPLORAR</span>
+          </div>
+        </button>
+        <div class="asym-right-wrap">
+          <button class="asym-banner reveal" onclick="openCat('comedor')">
+            <img data-cat="comedor" data-sub="sillas" src="https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=800&auto=format&fit=crop&q=80" alt="Comedor" />
+            <div class="asym-banner-overlay">
+              <h3>Comedor</h3>
+              <span class="explore-btn">EXPLORAR</span>
+            </div>
+          </button>
+          <button class="asym-banner reveal" onclick="openCat('dormitorio')">
+            <img data-cat="dormitorio" data-sub="mesitas" src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80" alt="Dormitorio" />
+            <div class="asym-banner-overlay">
+              <h3>Dormitorio</h3>
+              <span class="explore-btn">EXPLORAR</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
 
+    <!-- PRODUCTS SHOWCASE WITH TABS -->
+    <section class="section-padding" style="background: var(--white);">
+      <div class="section-title-wrap reveal">
+        <div class="gold-line"></div>
+        <h2>Lo Mas Destacado</h2>
+      </div>
+      <div class="showcase-tabs reveal">
+        <button class="showcase-tab-btn active" onclick="showShowcaseTab('best',this)">MAS VENDIDOS</button>
+        <button class="showcase-tab-btn" onclick="showShowcaseTab('new',this)">NUEVOS</button>
+      </div>
+      <div class="showcase-grid" id="showcaseGrid"></div>
+    </section>
+
+    <!-- PROMO BANNER -->
+    <section class="promo-banner reveal">
+      <span id="promoBannerLabel" class="promo-label">COLECCION EXCLUSIVA</span>
+      <h2 id="promoBannerTitle">DISENO SIN COMPROMISO</h2>
+      <p id="promoBannerDesc">Cada pieza seleccionada para elevar tu espacio. Calidad artesanal, diseno intemporal.</p>
+      <button class="btn-outline" onclick="openCat('sala')">EXPLORAR COLECCION</button>
+    </section>
+
+    <!-- BENEFITS BAR -->
+    <section class="benefits-bar reveal">
+      <div class="benefit-item">
+        <svg viewBox="0 0 32 32"><rect x="1" y="14" width="20" height="12" rx="2"/><polyline points="21,18 28,18 31,22 31,26 21,26"/><circle cx="8" cy="28" r="2.5"/><circle cx="25" cy="28" r="2.5"/><line x1="21" y1="14" x2="21" y2="26"/></svg>
+        <h4>ENVIO GRATIS</h4>
+        <p>En pedidos mayores a $2,000</p>
+      </div>
+      <div class="benefit-item">
+        <svg viewBox="0 0 32 32"><path d="M16 2L4 8v8c0 7.7 5.1 14.5 12 16 6.9-1.5 12-8.3 12-16V8L16 2z"/><polyline points="10,16 14,20 22,12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>PAGO SEGURO</h4>
+        <p>Transacciones 100% protegidas</p>
+      </div>
+      <div class="benefit-item">
+        <svg viewBox="0 0 32 32"><path d="M28 16c0 6.6-5.4 12-12 12-2.2 0-4.3-.6-6.1-1.7L2 28l1.7-7.9C2.6 18.3 2 16.2 2 14 2 7.4 7.4 2 14 2h2c6.6 0 12 5.4 12 12z"/><line x1="10" y1="12" x2="22" y2="12"/><line x1="10" y1="16" x2="18" y2="16"/><line x1="10" y1="20" x2="15" y2="20"/></svg>
+        <h4>ASESORIA EXPERTA</h4>
+        <p>Consultoria de diseno gratuita</p>
+      </div>
+      <div class="benefit-item">
+        <svg viewBox="0 0 32 32"><polyline points="4,16 4,4 28,4 28,16"/><path d="M2 16h28v12a2 2 0 01-2 2H4a2 2 0 01-2-2V16z"/><line x1="16" y1="16" x2="16" y2="30"/><line x1="2" y1="16" x2="30" y2="16"/><path d="M16 4C14 4 10 2 10 2s0 4 2 6 4 2 4 2"/><path d="M16 4c2 0 6-2 6-2s0 4-2 6-4 2-4 2"/></svg>
+        <h4>DEVOLUCIONES FACILES</h4>
+        <p>30 dias para cambios y devoluciones</p>
+      </div>
+    </section>
+
+    <!-- Hidden images for data-attributes (used by aplicarImagenes) -->
+    <div class="home-cat-imgs">
+      <img data-cat="sala" data-sub="sofas" />
+      <img data-cat="sala" data-sub="sillones" />
+      <img data-cat="sala" data-sub="mesas-centro" />
+      <img data-cat="sala" data-sub="estanterias" />
+      <img data-cat="comedor" data-sub="mesas" />
+      <img data-cat="comedor" data-sub="sillas" />
+      <img data-cat="comedor" data-sub="aparadores" />
+      <img data-cat="dormitorio" data-sub="camas" />
+      <img data-cat="dormitorio" data-sub="mesitas" />
+      <img data-cat="dormitorio" data-sub="comodas" />
+      <img data-cat="dormitorio" data-sub="armarios" />
+      <img data-cat="iluminacion" data-sub="pie" />
+      <img data-cat="iluminacion" data-sub="mesa" />
+      <img data-cat="iluminacion" data-sub="colgantes" />
+      <img data-cat="exterior" data-sub="jardin" />
+      <img data-cat="exterior" data-sub="tumbonas" />
+      <img data-cat="exterior" data-sub="mesas-ext" />
+    </div>
+
+    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
-            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles & interiorismo</span></div>
+            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles &amp; interiorismo</span></div>
           </div>
-          <p>Muebles de diseño contemporáneo. Parte de Muebles Milano.</p>
+          <p>Muebles de diseno contemporaneo con estetica italiana. Cada pieza es una obra de arte funcional para tu hogar.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.1 2.5 7.6 6 9.2-.1-.7-.1-1.9 0-2.7.1-.7.9-4.8.9-4.8s-.2-.5-.2-1.2c0-1.1.7-2 1.5-2 .7 0 1 .5 1 1.1 0 .7-.4 1.7-.7 2.7-.2.8.4 1.4 1.2 1.4 1.4 0 2.5-1.5 2.5-3.7 0-1.9-1.4-3.3-3.3-3.3-2.3 0-3.6 1.7-3.6 3.5 0 .7.3 1.4.6 1.8.1.1.1.2.1.3l-.2.9c0 .2-.1.2-.3.1-1-.5-1.6-1.9-1.6-3.1 0-2.5 1.8-4.8 5.2-4.8 2.7 0 4.8 1.9 4.8 4.5 0 2.7-1.7 4.9-4.1 4.9-.8 0-1.6-.4-1.8-.9l-.5 1.9c-.2.7-.7 1.6-1 2.1.8.2 1.6.4 2.4.4 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></a>
+          </div>
         </div>
         <div class="footer-col">
           <h4>COLECCIONES</h4>
@@ -495,63 +835,62 @@
           <button onclick="openCat('comedor')">Comedor</button>
           <button onclick="openCat('dormitorio')">Dormitorio</button>
           <button onclick="openCat('exterior')">Exterior</button>
-          <button onclick="openCat('iluminacion')">Iluminación</button>
+          <button onclick="openCat('iluminacion')">Iluminacion</button>
         </div>
         <div class="footer-col">
-          <h4>INFORMACIÓN</h4>
+          <h4>INFORMACION</h4>
           <button>Sobre Nosotros</button>
-          <button>Sala de Exposición</button>
+          <button>Sala de Exposicion</button>
           <button>Cuenta Profesional</button>
-          <button>Blog de Diseño</button>
+          <button>Blog de Diseno</button>
         </div>
-        <div class="footer-col">
-          <h4>AYUDA</h4>
-          <button>Contacto</button>
-          <button>Envíos y Devoluciones</button>
-          <button>Garantía</button>
-          <button>Financiamiento</button>
+        <div class="footer-col footer-newsletter">
+          <h4>NEWSLETTER</h4>
+          <p>Recibe tendencias de diseno, novedades y ofertas exclusivas.</p>
+          <div class="footer-newsletter-form">
+            <input type="email" placeholder="Tu email" />
+            <button>ENVIAR</button>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Muebles Milano. Todos los derechos reservados.</span>
-        <span>Muebles & Interiorismo</span>
+        <span>&copy; 2026 Muebles Milano. Todos los derechos reservados.</span>
+        <div class="payment-icons">
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="18" y="14" text-anchor="middle" font-size="7" fill="currentColor">VISA</text></svg>
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="14" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="22" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="18" y="14" text-anchor="middle" font-size="6" fill="currentColor">AMEX</text></svg>
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="18" y="14" text-anchor="middle" font-size="5.5" fill="currentColor">PayPal</text></svg>
+        </div>
       </div>
     </footer>
   </div><!-- /view-home -->
 
   <!-- ══════════════════════════════════════════
-       VISTA: CATEGORÍA
+       VISTA: CATEGORIA
   ══════════════════════════════════════════ -->
   <div id="view-cat" class="view">
 
-    <!-- Header sólido -->
-    <header class="site-header-solid">
-      <div class="header-top">
-        <div class="header-icons">
-          <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="22" height="22" stroke="white" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-          <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
-        </div>
+    <!-- Header solid -->
+    <header class="site-header-cat">
+      <div class="header-left">
+        <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         <div class="logo-wrap" onclick="goHome()">
           <svg class="logo-icon" viewBox="0 0 60 60" fill="none">
-            <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
-            <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
           </svg>
-          <div><div class="logo-name">MUEBLES MILANO</div><div class="logo-sub">muebles & interiorismo</div></div>
-        </div>
-        <div class="header-icons">
-          <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
-          <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+          <div class="logo-name">MUEBLES MILANO</div>
         </div>
       </div>
-      <nav class="site-nav">
+      <nav class="site-nav header-center">
         <div class="nav-item"><button onclick="openCat('sala')">NUEVO</button></div>
         <div class="nav-item">
           <button onclick="openCat('sala')">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
           <div class="dropdown">
-            <button onclick="openCat('sala','sofas')">Sofás</button>
+            <button onclick="openCat('sala','sofas')">Sofas</button>
             <button onclick="openCat('sala','sillones')">Sillones</button>
             <button onclick="openCat('sala','mesas-centro')">Mesas de Centro</button>
-            <button onclick="openCat('sala','estanterias')">Estanterías</button>
+            <button onclick="openCat('sala','estanterias')">Estanterias</button>
           </div>
         </div>
         <div class="nav-item">
@@ -567,22 +906,22 @@
           <div class="dropdown">
             <button onclick="openCat('dormitorio','camas')">Camas</button>
             <button onclick="openCat('dormitorio','mesitas')">Mesitas de Noche</button>
-            <button onclick="openCat('dormitorio','comodas')">Cómodas</button>
+            <button onclick="openCat('dormitorio','comodas')">Comodas</button>
             <button onclick="openCat('dormitorio','armarios')">Armarios</button>
           </div>
         </div>
         <div class="nav-item">
-          <button onclick="openCat('iluminacion')">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <button onclick="openCat('iluminacion')">ILUMINACION <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
           <div class="dropdown">
-            <button onclick="openCat('iluminacion','pie')">Lámparas de Pie</button>
-            <button onclick="openCat('iluminacion','mesa')">Lámparas de Mesa</button>
+            <button onclick="openCat('iluminacion','pie')">Lamparas de Pie</button>
+            <button onclick="openCat('iluminacion','mesa')">Lamparas de Mesa</button>
             <button onclick="openCat('iluminacion','colgantes')">Colgantes</button>
           </div>
         </div>
         <div class="nav-item">
           <button onclick="openCat('exterior')">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
           <div class="dropdown">
-            <button onclick="openCat('exterior','jardin')">Muebles de Jardín</button>
+            <button onclick="openCat('exterior','jardin')">Muebles de Jardin</button>
             <button onclick="openCat('exterior','tumbonas')">Tumbonas</button>
             <button onclick="openCat('exterior','mesas-ext')">Mesas Exterior</button>
           </div>
@@ -591,13 +930,18 @@
           <button onclick="openCat('marcas')">MARCAS <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
           <div class="dropdown">
             <button onclick="openCat('marcas','cassina')">Cassina</button>
-            <button onclick="openCat('marcas','bb-italia')">B&B Italia</button>
+            <button onclick="openCat('marcas','bb-italia')">B&amp;B Italia</button>
             <button onclick="openCat('marcas','knoll')">Knoll</button>
             <button onclick="openCat('marcas','fritz-hansen')">Fritz Hansen</button>
           </div>
         </div>
         <div class="nav-item"><button>CUENTA PROFESIONAL</button></div>
       </nav>
+      <div class="header-right header-icons">
+        <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+        <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+        <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+      </div>
     </header>
 
     <div class="cat-hero">
@@ -617,7 +961,7 @@
           <option value="">ORDENAR POR</option>
           <option value="asc">PRECIO: MENOR A MAYOR</option>
           <option value="desc">PRECIO: MAYOR A MENOR</option>
-          <option value="name">NOMBRE A–Z</option>
+          <option value="name">NOMBRE A-Z</option>
         </select>
       </div>
       <div class="products-grid" id="productsGrid"></div>
@@ -627,31 +971,46 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
-            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles & interiorismo</span></div>
+            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#c9a96e" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles &amp; interiorismo</span></div>
           </div>
-          <p>Muebles de diseño contemporáneo. Parte de Muebles Milano.</p>
+          <p>Muebles de diseno contemporaneo con estetica italiana.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.1 2.5 7.6 6 9.2-.1-.7-.1-1.9 0-2.7.1-.7.9-4.8.9-4.8s-.2-.5-.2-1.2c0-1.1.7-2 1.5-2 .7 0 1 .5 1 1.1 0 .7-.4 1.7-.7 2.7-.2.8.4 1.4 1.2 1.4 1.4 0 2.5-1.5 2.5-3.7 0-1.9-1.4-3.3-3.3-3.3-2.3 0-3.6 1.7-3.6 3.5 0 .7.3 1.4.6 1.8.1.1.1.2.1.3l-.2.9c0 .2-.1.2-.3.1-1-.5-1.6-1.9-1.6-3.1 0-2.5 1.8-4.8 5.2-4.8 2.7 0 4.8 1.9 4.8 4.5 0 2.7-1.7 4.9-4.1 4.9-.8 0-1.6-.4-1.8-.9l-.5 1.9c-.2.7-.7 1.6-1 2.1.8.2 1.6.4 2.4.4 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></a>
+          </div>
         </div>
         <div class="footer-col"><h4>COLECCIONES</h4>
           <button onclick="openCat('sala')">Sala de Estar</button>
           <button onclick="openCat('comedor')">Comedor</button>
           <button onclick="openCat('dormitorio')">Dormitorio</button>
           <button onclick="openCat('exterior')">Exterior</button>
-          <button onclick="openCat('iluminacion')">Iluminación</button>
+          <button onclick="openCat('iluminacion')">Iluminacion</button>
         </div>
-        <div class="footer-col"><h4>INFORMACIÓN</h4><button>Sobre Nosotros</button><button>Sala de Exposición</button><button>Blog de Diseño</button></div>
-        <div class="footer-col"><h4>AYUDA</h4><button>Contacto</button><button>Envíos y Devoluciones</button><button>Garantía</button></div>
+        <div class="footer-col"><h4>INFORMACION</h4><button>Sobre Nosotros</button><button>Sala de Exposicion</button><button>Blog de Diseno</button></div>
+        <div class="footer-col footer-newsletter">
+          <h4>NEWSLETTER</h4>
+          <p>Ofertas exclusivas y novedades.</p>
+          <div class="footer-newsletter-form">
+            <input type="email" placeholder="Tu email" />
+            <button>ENVIAR</button>
+          </div>
+        </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Muebles Milano. Todos los derechos reservados.</span>
-        <span>Muebles & Interiorismo</span>
+        <span>&copy; 2026 Muebles Milano. Todos los derechos reservados.</span>
+        <div class="payment-icons">
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="18" y="14" text-anchor="middle" font-size="7" fill="currentColor">VISA</text></svg>
+          <svg viewBox="0 0 36 22"><rect x="1" y="1" width="34" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="14" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="22" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </div>
       </div>
     </footer>
   </div><!-- /view-cat -->
 
   <script>
   /* ══════════════════════════════════════════
-     CATÁLOGO
+     CATALOGO
   ══════════════════════════════════════════ */
   const catalog = {
     sala: {
@@ -852,6 +1211,7 @@
     poblarMarcas();
     await loadTextsFromSupabase();
     aplicarImagenes();
+    renderShowcase('best');
   })();
 
   /* ══════════════════════════════════════════
@@ -997,7 +1357,7 @@
     if (!cart.length) {
       wrap.innerHTML = `<div class="cart-empty">
         <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <p>TU CARRITO ESTÁ VACÍO</p></div>`;
+        <p>TU CARRITO ESTA VACIO</p></div>`;
       document.getElementById('cartTotalAmt').textContent = '$0';
       return;
     }
@@ -1009,10 +1369,10 @@
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-price">$${(item.price * item.qty).toLocaleString('es-MX')}</div>
           <div class="cart-item-row">
-            <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+            <button class="qty-btn" onclick="changeQty(${i},-1)">&minus;</button>
             <span class="qty-val">${item.qty}</span>
             <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-            <button class="cart-rm" onclick="removeItem(${i})" title="Eliminar">×</button>
+            <button class="cart-rm" onclick="removeItem(${i})" title="Eliminar">&times;</button>
           </div>
         </div>
       </div>`).join('');
@@ -1027,6 +1387,120 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeMobMenu(); closeCart(); }
   });
+  </script>
+
+  <!-- ── NEW: Header scroll toggle + Showcase + IntersectionObserver ── -->
+  <script>
+  // ── Header transparent/solid toggle on scroll ──
+  (function() {
+    const header = document.getElementById('homeHeader');
+    if (!header) return;
+    function onScroll() {
+      if (window.scrollY > 80) {
+        header.classList.remove('header-transparent');
+        header.classList.add('header-solid-white');
+      } else {
+        header.classList.remove('header-solid-white');
+        header.classList.add('header-transparent');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // ── Showcase products (best sellers / new) ──
+  function getAllProducts() {
+    const all = [];
+    for (const cat of Object.values(catalog)) {
+      for (const sub of Object.values(cat.subcategories)) {
+        if (sub.items) all.push(...sub.items);
+      }
+    }
+    return all;
+  }
+
+  function renderShowcase(type) {
+    const all = getAllProducts();
+    let filtered;
+    if (type === 'new') {
+      filtered = all.filter(p => p.badge && (p.badge === 'NUEVO')).slice(0, 8);
+      if (filtered.length < 8) filtered = filtered.concat(all.filter(p => !filtered.includes(p)).slice(0, 8 - filtered.length));
+    } else {
+      filtered = all.filter(p => p.badge && (p.badge === 'MÁS VENDIDO' || p.badge === 'EXCLUSIVO')).slice(0, 8);
+      if (filtered.length < 8) filtered = filtered.concat(all.filter(p => !filtered.includes(p)).slice(0, 8 - filtered.length));
+    }
+    filtered = filtered.slice(0, 8);
+
+    const grid = document.getElementById('showcaseGrid');
+    grid.innerHTML = filtered.map((p, i) => `
+      <div class="showcase-card reveal">
+        <div class="showcase-card-img">
+          <img src="${p.img}" alt="${p.name}" loading="lazy" />
+          ${p.badge ? `<span class="showcase-badge">${p.badge}</span>` : ''}
+          <div class="showcase-card-hover">
+            <button class="quick-view" aria-label="Vista rapida"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button>
+            <button class="add-btn" onclick="event.stopPropagation();showcaseAddToCart(${i},'${type}')">AGREGAR</button>
+          </div>
+        </div>
+        <div class="showcase-info">
+          <div class="showcase-brand">${p.brand}</div>
+          <div class="showcase-name">${p.name}</div>
+          <div class="showcase-price">$${p.price.toLocaleString('es-MX')}</div>
+        </div>
+      </div>`).join('');
+
+    // Re-observe new elements
+    initRevealObserver();
+  }
+
+  // Store showcase items for add-to-cart
+  let showcaseItems = { best: [], new: [] };
+  function showShowcaseTab(type, btn) {
+    document.querySelectorAll('.showcase-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderShowcase(type);
+  }
+
+  function showcaseAddToCart(idx, type) {
+    const all = getAllProducts();
+    let filtered;
+    if (type === 'new') {
+      filtered = all.filter(p => p.badge && p.badge === 'NUEVO').slice(0, 8);
+      if (filtered.length < 8) filtered = filtered.concat(all.filter(p => !filtered.includes(p)).slice(0, 8 - filtered.length));
+    } else {
+      filtered = all.filter(p => p.badge && (p.badge === 'MÁS VENDIDO' || p.badge === 'EXCLUSIVO')).slice(0, 8);
+      if (filtered.length < 8) filtered = filtered.concat(all.filter(p => !filtered.includes(p)).slice(0, 8 - filtered.length));
+    }
+    filtered = filtered.slice(0, 8);
+    const p = filtered[idx];
+    if (!p) return;
+    const key = p.brand + '|' + p.name;
+    const existing = cart.find(i => i.key === key);
+    if (existing) { existing.qty++; }
+    else { cart.push({ key, brand: p.brand, name: p.name, price: p.price, img: p.img, qty: 1 }); }
+    saveCart(); updateCartBadge(); openCart();
+  }
+
+  // ── IntersectionObserver for scroll reveal ──
+  function initRevealObserver() {
+    const els = document.querySelectorAll('.reveal:not(.visible)');
+    if (!els.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => observer.observe(el));
+  }
+  initRevealObserver();
+
+  // ── Initial showcase render (fallback if Supabase not loaded yet) ──
+  if (!document.getElementById('showcaseGrid').children.length) {
+    renderShowcase('best');
+  }
   </script>
 </body>
 </html>

@@ -181,9 +181,12 @@
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sa2d4cXN2YWV3amZjaW9kYXZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDc0NzcsImV4cCI6MjA5MTA4MzQ3N30.pTl61XQl-tW16rOE8ORGfssaCKQadSB6EH3uygw04zU';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let supabase;
+  try {
+    const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sa2d4cXN2YWV3amZjaW9kYXZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDc0NzcsImV4cCI6MjA5MTA4MzQ3N30.pTl61XQl-tW16rOE8ORGfssaCKQadSB6EH3uygw04zU';
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) { console.warn('Supabase init failed:', e); }
 </script>
 </head>
 <body>
@@ -401,7 +404,6 @@
           { brand:'Gloster', name:'Mesa Grid', desc:'Aluminio y HPL, varios tamaños', price:1800, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'' },
         ]},
       }
-    },
     }
   };
 
@@ -429,11 +431,12 @@
   function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
   async function loadData() {
+    if (!supabase) return;
     try {
       const { data: catRow, error: catErr } = await supabase.from('catalog').select('data').eq('id', 1).single();
       const { data: txtRow, error: txtErr } = await supabase.from('texts').select('data').eq('id', 1).single();
-      catalog = (catRow && catRow.data && !catErr) ? catRow.data : deepClone(DEFAULT_CATALOG);
-      texts   = (txtRow && txtRow.data && !txtErr) ? txtRow.data : deepClone(DEFAULT_TEXTS);
+      if (catRow && catRow.data && !catErr) catalog = catRow.data;
+      if (txtRow && txtRow.data && !txtErr) texts = txtRow.data;
       // Auto-save defaults to Supabase if empty
       if (!catRow || !catRow.data || catErr) {
         await supabase.from('catalog').update({ data: catalog, updated_at: new Date().toISOString() }).eq('id', 1);
@@ -443,26 +446,28 @@
       }
     } catch(e) {
       console.warn('Supabase load failed, using defaults:', e);
-      catalog = deepClone(DEFAULT_CATALOG);
-      texts   = deepClone(DEFAULT_TEXTS);
     }
   }
 
   async function saveAll() {
     collectFormValues();
-    await supabase.from('catalog').update({ data: catalog, updated_at: new Date().toISOString() }).eq('id', 1);
-    await supabase.from('texts').update({ data: texts, updated_at: new Date().toISOString() }).eq('id', 1);
+    if (supabase) {
+      await supabase.from('catalog').update({ data: catalog, updated_at: new Date().toISOString() }).eq('id', 1);
+      await supabase.from('texts').update({ data: texts, updated_at: new Date().toISOString() }).eq('id', 1);
+    }
     showToast('✓ Cambios guardados correctamente');
   }
 
   async function resetAll() {
     if (!confirm('¿Resetear todo a los valores originales? Se perderán todos los cambios.')) return;
-    await supabase.from('catalog').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
-    await supabase.from('texts').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
-    loadData().then(() => {
-      renderSection(activeSection);
-      showToast('↺ Valores restaurados');
-    });
+    if (supabase) {
+      await supabase.from('catalog').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
+      await supabase.from('texts').update({ data: null, updated_at: new Date().toISOString() }).eq('id', 1);
+    }
+    catalog = deepClone(DEFAULT_CATALOG);
+    texts = deepClone(DEFAULT_TEXTS);
+    renderSection(activeSection);
+    showToast('↺ Valores restaurados');
   }
 
   function openSite() {

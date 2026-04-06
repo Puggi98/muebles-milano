@@ -504,9 +504,12 @@
   </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sa2d4cXN2YWV3amZjaW9kYXZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDc0NzcsImV4cCI6MjA5MTA4MzQ3N30.pTl61XQl-tW16rOE8ORGfssaCKQadSB6EH3uygw04zU';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let supabase;
+  try {
+    const SUPABASE_URL = 'https://nlkgxqsvaewjfciodavt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sa2d4cXN2YWV3amZjaW9kYXZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDc0NzcsImV4cCI6MjA5MTA4MzQ3N30.pTl61XQl-tW16rOE8ORGfssaCKQadSB6EH3uygw04zU';
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) { console.warn('Supabase init failed:', e); }
 </script>
 </head>
 <body>
@@ -1169,6 +1172,7 @@
 
   // ── Cargar overrides del admin (Supabase) ──
   async function loadCatalogFromSupabase() {
+    if (!supabase) return;
     try {
       const { data: catRow } = await supabase.from('catalog').select('data').eq('id', 1).single();
       if (catRow && catRow.data) {
@@ -1187,6 +1191,23 @@
           }
         }
       }
+    } catch(e) {}
+  }
+
+  // ── Aplicar textos guardados del admin (Supabase) ──
+  async function loadTextsFromSupabase() {
+    if (!supabase) return;
+    try {
+      const { data: txtRow } = await supabase.from('texts').select('data').eq('id', 1).single();
+      if (!txtRow || !txtRow.data) return;
+      const t = txtRow.data;
+      if (t.announceBar)      { const el = document.getElementById('announceBar');      if (el) el.textContent = t.announceBar; }
+      if (t.heroImg)          { const el = document.getElementById('heroImgEl');        if (el) el.src = t.heroImg; }
+      if (t.heroPromoLabel)   { const el = document.getElementById('heroPromoLabel');   if (el) el.textContent = t.heroPromoLabel; }
+      if (t.heroPromoSub)     { const el = document.getElementById('heroPromoSub');     if (el) el.textContent = t.heroPromoSub; }
+      if (t.promoBannerLabel) { const el = document.getElementById('promoBannerLabel'); if (el) el.textContent = t.promoBannerLabel; }
+      if (t.promoBannerTitle) { const el = document.getElementById('promoBannerTitle'); if (el) el.textContent = t.promoBannerTitle; }
+      if (t.promoBannerDesc)  { const el = document.getElementById('promoBannerDesc');  if (el) el.textContent = t.promoBannerDesc; }
     } catch(e) {}
   }
 

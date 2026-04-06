@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muebles Milano – Categoría</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --olive: #8c8b68;
+      --olive-bright: #a3a27c;
+      --navy: #1b2140;
+      --navy-dark: #131929;
+      --white: #ffffff;
+      --gray-light: #f4f4f2;
+      --gray-mid: #888;
+      --font-sans: 'Montserrat', sans-serif;
+      --font-serif: 'Cormorant Garamond', serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); color: var(--navy); background: var(--white); }
+
+    /* ── ANNOUNCE BAR ── */
+    .announce-bar {
+      background: var(--navy-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 9px 20px;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      font-weight: 300;
+    }
+
+    /* ── HEADER (sólido) ── */
+    .site-header {
+      background: var(--navy-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 48px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-icons { display: flex; align-items: center; gap: 22px; }
+    .header-icons button {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; padding: 4px;
+    }
+    .header-icons svg { width: 20px; height: 20px; stroke: var(--white); fill: none; stroke-width: 1.5; }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .logo-icon { width: 46px; height: 46px; }
+    .logo-text-group { display: flex; flex-direction: column; gap: 2px; }
+    .logo-name { color: var(--white); font-size: 22px; font-weight: 700; letter-spacing: 4px; line-height: 1; }
+    .logo-sub { color: rgba(255,255,255,.65); font-size: 8px; font-weight: 300; letter-spacing: 2.5px; }
+
+    /* ── NAV ── */
+    .site-nav {
+      margin-top: 16px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding-top: 12px;
+    }
+    .nav-item { position: relative; }
+    .nav-item > a {
+      color: var(--white); text-decoration: none;
+      font-size: 10px; letter-spacing: 2px; font-weight: 400;
+      padding: 6px 14px;
+      display: flex; align-items: center; gap: 4px;
+      white-space: nowrap; transition: opacity .2s;
+    }
+    .nav-item > a:hover { opacity: .65; }
+    .nav-item > a svg { width: 9px; height: 9px; stroke: var(--white); fill: none; stroke-width: 2; }
+    .mega-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      padding: 28px 28px 24px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.18);
+      z-index: 200;
+      flex-direction: row;
+      gap: 6px;
+    }
+    .nav-item:hover .mega-menu { display: flex; }
+    .mega-tile { display: flex; flex-direction: column; text-decoration: none; width: 148px; cursor: pointer; }
+    .mega-tile-img-wrap { overflow: hidden; width: 148px; height: 130px; }
+    .mega-tile-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .45s ease; }
+    .mega-tile:hover .mega-tile-img { transform: scale(1.06); }
+    .mega-tile span { display: block; font-size: 9px; letter-spacing: 2.5px; color: var(--navy); padding: 10px 2px 0; font-weight: 500; font-family: var(--font-sans); transition: color .2s; }
+    .mega-tile:hover span { color: var(--olive); }
+
+    /* ── CATEGORY HERO ── */
+    .cat-hero {
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+    }
+    .cat-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      filter: brightness(.45);
+    }
+    .cat-hero-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .cat-hero-content .cat-breadcrumb {
+      font-size: 10px; letter-spacing: 2px;
+      color: rgba(255,255,255,.6);
+    }
+    .cat-hero-content .cat-breadcrumb a { color: rgba(255,255,255,.6); text-decoration: none; }
+    .cat-hero-content .cat-breadcrumb a:hover { color: var(--white); }
+    .cat-hero-content h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-family: var(--font-serif);
+      color: var(--white);
+      letter-spacing: 6px;
+      font-weight: 300;
+    }
+
+    /* ── SUBCATEGORY TABS ── */
+    .tab-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 1px solid #e0e0dc;
+      background: var(--white);
+      padding: 0 40px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 10px; letter-spacing: 2.5px;
+      color: var(--gray-mid);
+      padding: 18px 20px;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--navy); }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--olive-bright); font-weight: 500; }
+
+    /* ── PRODUCT GRID ── */
+    .products-section { padding: 60px 60px 80px; background: var(--white); }
+    .products-count {
+      font-size: 10px; letter-spacing: 2px;
+      color: var(--gray-mid); margin-bottom: 36px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sort-select {
+      font-family: var(--font-sans); font-size: 10px;
+      letter-spacing: 1px; color: var(--navy);
+      border: 1px solid #ddd; padding: 6px 12px;
+      background: var(--white); cursor: pointer;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .product-card { cursor: pointer; }
+    .product-card-img-wrap {
+      position: relative; overflow: hidden;
+      aspect-ratio: 3/3.5;
+      background: var(--gray-light);
+    }
+    .product-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+      display: block;
+    }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--olive-bright); color: var(--white);
+      font-size: 8px; letter-spacing: 2px; padding: 4px 10px;
+    }
+    .product-info { padding: 14px 0 0; }
+    .product-brand { font-size: 9px; letter-spacing: 2px; color: var(--olive); text-transform: uppercase; }
+    .product-name { font-size: 13px; letter-spacing: .5px; margin: 5px 0 4px; color: var(--navy); font-weight: 400; }
+    .product-desc { font-size: 10px; color: var(--gray-mid); letter-spacing: .5px; line-height: 1.7; margin-bottom: 8px; }
+    .product-price { font-size: 13px; color: var(--navy); font-weight: 500; }
+
+    /* empty state */
+    .empty-state {
+      text-align: center; padding: 80px 40px;
+      color: var(--gray-mid); font-size: 12px; letter-spacing: 2px;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer { background: var(--navy-dark); color: rgba(255,255,255,.65); padding: 60px 64px 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .footer-logo-icon { width: 36px; height: 36px; }
+    .footer-logo-name { color: var(--white); font-size: 14px; font-weight: 700; letter-spacing: 3px; display: block; line-height: 1; }
+    .footer-logo-sub { color: rgba(255,255,255,.45); font-size: 8px; letter-spacing: 2px; font-weight: 300; }
+    .footer-brand p { font-size: 11px; letter-spacing: .5px; line-height: 2.1; max-width: 260px; }
+    .footer-col h4 { font-size: 10px; letter-spacing: 3px; color: var(--white); margin-bottom: 16px; font-weight: 500; }
+    .footer-col a { display: block; font-size: 11px; color: rgba(255,255,255,.5); text-decoration: none; margin-bottom: 10px; transition: color .2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 22px; font-size: 10px; letter-spacing: 1px; display: flex; justify-content: space-between; color: rgba(255,255,255,.3); }
+  </style>
+</head>
+<body>
+
+  <!-- ANNOUNCE -->
+  <div class="announce-bar">ENVÍO GRATIS EN PEDIDOS MAYORES A $2,000 &nbsp;|&nbsp; VISITA NUESTRA SALA DE EXPOSICIÓN</div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-top">
+      <div class="header-icons">
+        <button aria-label="Buscar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        </button>
+      </div>
+      <a class="logo-wrap" href="index.html">
+        <svg class="logo-icon" viewBox="0 0 60 60" fill="none">
+          <path d="M 4,52 L 4,24 L 20,8 L 34,24 L 34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+          <path d="M 24,52 L 24,24 L 40,8 L 56,24 L 56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="logo-text-group">
+          <span class="logo-name">MUEBLES MILANO</span>
+          <span class="logo-sub">muebles & interiorismo</span>
+        </div>
+      </a>
+      <div class="header-icons">
+        <button aria-label="Mi cuenta">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </button>
+        <button aria-label="Carrito">
+          <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <div class="nav-item"><a href="index.html">NUEVO</a></div>
+      <div class="nav-item">
+        <a href="categoria.html#sala">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#sala/sofas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=200&auto=format&fit=crop&q=80" alt="Sofás"/></div><span>SOFÁS</span></a>
+          <a class="mega-tile" href="categoria.html#sala/sillones"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=300&h=200&auto=format&fit=crop&q=80" alt="Sillones"/></div><span>SILLONES</span></a>
+          <a class="mega-tile" href="categoria.html#sala/mesas-centro"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1618220048045-10a6dbdf51e1?w=300&h=200&auto=format&fit=crop&q=80" alt="Mesas de Centro"/></div><span>MESAS DE CENTRO</span></a>
+          <a class="mega-tile" href="categoria.html#sala/estanterias"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=300&h=200&auto=format&fit=crop&q=80" alt="Estanterías"/></div><span>ESTANTERÍAS</span></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="categoria.html#comedor">COMEDOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#comedor/mesas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=300&h=200&auto=format&fit=crop&q=80" alt="Mesas"/></div><span>MESAS</span></a>
+          <a class="mega-tile" href="categoria.html#comedor/sillas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1592078615290-033ee584e267?w=300&h=200&auto=format&fit=crop&q=80" alt="Sillas"/></div><span>SILLAS</span></a>
+          <a class="mega-tile" href="categoria.html#comedor/aparadores"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1615529162924-f8605388461d?w=300&h=200&auto=format&fit=crop&q=80" alt="Aparadores"/></div><span>APARADORES</span></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="categoria.html#dormitorio">DORMITORIO <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#dormitorio/camas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=300&h=200&auto=format&fit=crop&q=80" alt="Camas"/></div><span>CAMAS</span></a>
+          <a class="mega-tile" href="categoria.html#dormitorio/mesitas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=300&h=200&auto=format&fit=crop&q=80" alt="Mesitas"/></div><span>MESITAS DE NOCHE</span></a>
+          <a class="mega-tile" href="categoria.html#dormitorio/comodas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=300&h=200&auto=format&fit=crop&q=80" alt="Cómodas"/></div><span>CÓMODAS</span></a>
+          <a class="mega-tile" href="categoria.html#dormitorio/armarios"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&auto=format&fit=crop&q=80" alt="Armarios"/></div><span>ARMARIOS</span></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="categoria.html#iluminacion">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#iluminacion/pie"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&auto=format&fit=crop&q=80" alt="Lámparas Pie"/></div><span>LÁMPARAS DE PIE</span></a>
+          <a class="mega-tile" href="categoria.html#iluminacion/mesa"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1513506003901-1e6a35497d4b?w=300&h=200&auto=format&fit=crop&q=80" alt="Lámparas Mesa"/></div><span>LÁMPARAS DE MESA</span></a>
+          <a class="mega-tile" href="categoria.html#iluminacion/colgantes"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=300&h=200&auto=format&fit=crop&q=80" alt="Colgantes"/></div><span>COLGANTES</span></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="categoria.html#exterior">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#exterior/jardin"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=300&h=200&auto=format&fit=crop&q=80" alt="Jardín"/></div><span>MUEBLES DE JARDÍN</span></a>
+          <a class="mega-tile" href="categoria.html#exterior/tumbonas"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=300&h=200&auto=format&fit=crop&q=80" alt="Tumbonas"/></div><span>TUMBONAS</span></a>
+          <a class="mega-tile" href="categoria.html#exterior/mesas-ext"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300&h=200&auto=format&fit=crop&q=80" alt="Mesas Ext"/></div><span>MESAS EXTERIOR</span></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="categoria.html#marcas">MARCAS <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></a>
+        <div class="mega-menu">
+          <a class="mega-tile" href="categoria.html#marcas/cassina"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80" alt="Cassina"/></div><span>CASSINA</span></a>
+          <a class="mega-tile" href="categoria.html#marcas/bb-italia"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=200&auto=format&fit=crop&q=80" alt="B&B Italia"/></div><span>B&B ITALIA</span></a>
+          <a class="mega-tile" href="categoria.html#marcas/knoll"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=300&h=200&auto=format&fit=crop&q=80" alt="Knoll"/></div><span>KNOLL</span></a>
+          <a class="mega-tile" href="categoria.html#marcas/fritz-hansen"><div class="mega-tile-img-wrap"><img class="mega-tile-img" src="https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=300&h=200&auto=format&fit=crop&q=80" alt="Fritz Hansen"/></div><span>FRITZ HANSEN</span></a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="#">CUENTA PROFESIONAL</a></div>
+    </nav>
+  </header>
+
+  <!-- CATEGORY HERO -->
+  <div class="cat-hero" id="catHero">
+    <img id="catHeroImg" src="" alt="" />
+    <div class="cat-hero-content">
+      <p class="cat-breadcrumb"><a href="index.html">Inicio</a> &nbsp;/&nbsp; <span id="catBreadcrumb"></span></p>
+      <h1 id="catTitle"></h1>
+    </div>
+  </div>
+
+  <!-- SUBCATEGORY TABS -->
+  <div class="tab-bar" id="tabBar"></div>
+
+  <!-- PRODUCTS -->
+  <section class="products-section">
+    <div class="products-count" style="max-width:1300px; margin:0 auto;">
+      <span id="productCount"></span>
+      <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+        <option value="default">ORDENAR POR</option>
+        <option value="asc">PRECIO: MENOR A MAYOR</option>
+        <option value="desc">PRECIO: MAYOR A MENOR</option>
+        <option value="name">NOMBRE A–Z</option>
+      </select>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none">
+            <path d="M 4,52 L 4,24 L 20,8 L 34,24 L 34,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            <path d="M 24,52 L 24,24 L 40,8 L 56,24 L 56,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+          </svg>
+          <div>
+            <span class="footer-logo-name">MUEBLES MILANO</span>
+            <span class="footer-logo-sub">muebles & interiorismo</span>
+          </div>
+        </div>
+        <p>Muebles de diseño contemporáneo para espacios que inspiran. Parte de Muebles Milano.</p>
+      </div>
+      <div class="footer-col">
+        <h4>COLECCIONES</h4>
+        <a href="categoria.html#sala">Sala de Estar</a>
+        <a href="categoria.html#comedor">Comedor</a>
+        <a href="categoria.html#dormitorio">Dormitorio</a>
+        <a href="categoria.html#exterior">Exterior</a>
+        <a href="categoria.html#iluminacion">Iluminación</a>
+      </div>
+      <div class="footer-col">
+        <h4>INFORMACIÓN</h4>
+        <a href="#">Sobre Nosotros</a>
+        <a href="#">Sala de Exposición</a>
+        <a href="#">Cuenta Profesional</a>
+        <a href="#">Blog de Diseño</a>
+      </div>
+      <div class="footer-col">
+        <h4>AYUDA</h4>
+        <a href="#">Contacto</a>
+        <a href="#">Envíos y Devoluciones</a>
+        <a href="#">Garantía</a>
+        <a href="#">Financiamiento</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Muebles Milano. Todos los derechos reservados.</span>
+      <span>Muebles & Interiorismo</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ─── CATÁLOGO COMPLETO ─── */
+    const catalog = {
+      sala: {
+        label: 'Sala de Estar',
+        heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'sofas': {
+            label: 'Sofás',
+            items: [
+              { brand: 'Cassina', name: 'Sofá Sengu 3 Plazas', desc: 'Tapizado en bouclé natural, patas de madera de roble', price: 4200, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'B&B Italia', name: 'Sofá Charles', desc: 'Cuero plena flor, estructura metálica mate', price: 6800, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Knoll', name: 'Sofá Florence', desc: 'Clásico atemporal en tejido lana, tapicería a medida', price: 3900, img: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Arflex', name: 'Sofá Marenco', desc: 'Poltrona de culto, espuma de alta densidad', price: 5100, img: 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Minotti', name: 'Sofá Laurence', desc: 'Diseño italiano, tapizado en velvet gris acero', price: 7200, img: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Poliform', name: 'Sofá Park', desc: 'Seccional modular, infinitas configuraciones', price: 8900, img: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80', badge: 'MÁS VENDIDO' },
+            ]
+          },
+          'sillones': {
+            label: 'Sillones',
+            items: [
+              { brand: 'Fritz Hansen', name: 'Egg Chair', desc: 'Icónico diseño de Arne Jacobsen, tapizado a elegir', price: 3400, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge: 'CLÁSICO' },
+              { brand: 'Herman Miller', name: 'Eames Lounge Chair', desc: 'Cuero natural y madera de nogal americano', price: 4100, img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Cassina', name: 'LC2 Petit Confort', desc: 'Le Corbusier, estructura de acero cromado', price: 3800, img: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Arper', name: 'Sillón Loom', desc: 'Tejido natural trenzado, base en madera maciza', price: 1800, img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Ligne Roset', name: 'Togo Sillón', desc: 'Espuma integral, tapizado en tela suave', price: 2600, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'B&B Italia', name: 'Sillón Fat-Fat', desc: 'Diseño de Patricia Urquiola, polipiel premium', price: 2900, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'mesas-centro': {
+            label: 'Mesas de Centro',
+            items: [
+              { brand: 'B&B Italia', name: 'Mesa Butterfly', desc: 'Vidrio templado y base de acero lacado', price: 1900, img: 'https://images.unsplash.com/photo-1618220048045-10a6dbdf51e1?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Cassina', name: 'Mesa Accent', desc: 'Mármol Calacatta, patas metálicas doradas', price: 3200, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Knoll', name: 'Tulip Coffee Table', desc: 'Base pedestal en aluminio lacado blanco', price: 1400, img: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Minotti', name: 'Mesa Wedge', desc: 'Madera de nogal macizo, acabado natural', price: 2100, img: 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'estanterias': {
+            label: 'Estanterías',
+            items: [
+              { brand: 'Vitsoe', name: 'Sistema 606', desc: 'El sistema de estantería modular más icónico del siglo XX', price: 2800, img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge: 'CLÁSICO' },
+              { brand: 'Cassina', name: 'Librería Infinito', desc: 'Madera de cerezo y acero, personalizable en altura', price: 4500, img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'String', name: 'String System', desc: 'Diseño escandinavo, montaje mural flexible', price: 890, img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'USM Haller', name: 'USM Haller Shelving', desc: 'Sistema modular de acero cromado, indestructible', price: 3600, img: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+            ]
+          }
+        }
+      },
+
+      comedor: {
+        label: 'Comedor',
+        heroImg: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'mesas': {
+            label: 'Mesas de Comedor',
+            items: [
+              { brand: 'Cassina', name: 'Mesa À Quatre Mains', desc: 'Madera de nogal macizo, hasta 10 personas', price: 5800, img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Fritz Hansen', name: 'Mesa Supercircular', desc: 'Diseño de Piet Hein, múltiples tamaños disponibles', price: 3200, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Knoll', name: 'Mesa Saarinen Oval', desc: 'Base tulipán en aluminio, tablero en laminado', price: 2900, img: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Poliform', name: 'Mesa Concorde', desc: 'Vidrio extra claro, estructura acero inox', price: 4100, img: 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'B&B Italia', name: 'Mesa Maxalto', desc: 'Madera de fresno tintada, extensible hasta 3m', price: 6200, img: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Arper', name: 'Mesa Zef', desc: 'Tablero de resina fenólica, base metálica', price: 1800, img: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'sillas': {
+            label: 'Sillas',
+            items: [
+              { brand: 'Fritz Hansen', name: 'Silla Series 7', desc: 'La silla más vendida del mundo, chapa de madera', price: 890, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge: 'MÁS VENDIDO' },
+              { brand: 'Cassina', name: 'Silla 412 CAB', desc: 'Cuero sellado al exterior, estructura de acero', price: 1200, img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Knoll', name: 'Bertoia Side Chair', desc: 'Estructura de varilla metálica, cojín incluido', price: 760, img: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Vitra', name: 'Silla Hal Wood', desc: 'Base de madera de roble, carcasa de polipropileno', price: 540, img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Arper', name: 'Catifa 46', desc: 'Silla apilable, tapizado integral opcional', price: 480, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Magis', name: 'Chair One', desc: 'Fundición de aluminio, apilable, exterior/interior', price: 620, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'aparadores': {
+            label: 'Aparadores',
+            items: [
+              { brand: 'Poliform', name: 'Aparador Alambra', desc: 'Madera lacada mate, herrajes dorados', price: 3800, img: 'https://images.unsplash.com/photo-1618220048045-10a6dbdf51e1?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Cassina', name: 'Aparador 605', desc: 'Madera de nogal, patas metálicas altas', price: 4600, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'B&B Italia', name: 'Aparador Maxalto', desc: 'Madera de cerezo, interiores lacados', price: 5100, img: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Minotti', name: 'Aparador Sullivan', desc: 'Estructura de metal, puertas de cristal ahumado', price: 2900, img: 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80' },
+            ]
+          }
+        }
+      },
+
+      dormitorio: {
+        label: 'Dormitorio',
+        heroImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'camas': {
+            label: 'Camas',
+            items: [
+              { brand: 'Poliform', name: 'Cama Letto Moderno', desc: 'Cabecero tapizado en cuero, estructura de madera', price: 4800, img: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge: 'MÁS VENDIDO' },
+              { brand: 'B&B Italia', name: 'Cama Charles', desc: 'Cabecero extragrande, base plataforma flotante', price: 6200, img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Cassina', name: 'Cama Noctis', desc: 'Mecanismo de apertura lateral, colchón incluido', price: 5400, img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Minotti', name: 'Cama Yang', desc: 'Cabecero en madera de roble, tapizado en bouclé', price: 7100, img: 'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Flou', name: 'Cama Nathalie', desc: 'Tejido desmontable y lavable, base nórdica', price: 3200, img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Ligne Roset', name: 'Cama Topaze', desc: 'Diseño bajo al suelo, tapizado integral', price: 2900, img: 'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'mesitas': {
+            label: 'Mesitas de Noche',
+            items: [
+              { brand: 'Poliform', name: 'Mesita Letto', desc: 'Madera de nogal, cajón con apertura push', price: 980, img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Minotti', name: 'Mesita Yang', desc: 'Tablero de mármol, base metálica dorada', price: 1400, img: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'B&B Italia', name: 'Mesita Maxalto', desc: 'Madera lacada, múltiples acabados', price: 1100, img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Cassina', name: 'Mesita Noctis', desc: 'Compacta con estante integrado y puerto USB', price: 860, img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'comodas': {
+            label: 'Cómodas',
+            items: [
+              { brand: 'Poliform', name: 'Cómoda Senzafine', desc: 'Madera lacada, tiradores de acero inox', price: 2800, img: 'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Minotti', name: 'Cómoda Sullivan', desc: '4 cajones, tablero de mármol negro', price: 3400, img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Ligne Roset', name: 'Cómoda Trica', desc: 'Madera de roble, acabado natural', price: 1900, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'B&B Italia', name: 'Cómoda Maxalto', desc: 'Madera de cerezo, patas metálicas altas', price: 4100, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'armarios': {
+            label: 'Armarios',
+            items: [
+              { brand: 'Poliform', name: 'Armario Senzafine', desc: 'Puertas correderas, interior personalizable', price: 8900, img: 'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80', badge: 'MÁS VENDIDO' },
+              { brand: 'Porro', name: 'Armario Link', desc: 'Sistema modular, lacado mate o madera', price: 6400, img: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Molteni', name: 'Armario 505', desc: 'Modulación libre, acabados premium', price: 7200, img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Rimadesio', name: 'Armario Zenit', desc: 'Puertas de cristal, aluminio anodizado', price: 5800, img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+            ]
+          }
+        }
+      },
+
+      iluminacion: {
+        label: 'Iluminación',
+        heroImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'pie': {
+            label: 'Lámparas de Pie',
+            items: [
+              { brand: 'Artemide', name: 'Tolomeo Lettura', desc: 'Aluminio anodizado, brazo articulado regulable', price: 1140, img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge: 'CLÁSICO' },
+              { brand: 'Flos', name: 'Arco', desc: 'Mármol de Carrara, arco de acero, ícono del diseño', price: 2800, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Louis Poulsen', name: 'Panthella Floor', desc: 'Pantalla de acrílico opal, base de acero', price: 1900, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Oluce', name: 'Atollo Floor', desc: 'Aluminio lacado blanco, diseño de Vico Magistretti', price: 2100, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'mesa': {
+            label: 'Lámparas de Mesa',
+            items: [
+              { brand: 'Artemide', name: 'Tolomeo Tavolo', desc: 'Aluminio anodizado, brazo articulado', price: 680, img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Flos', name: 'Kelvin LED', desc: 'LED integrado, temperatura de color regulable', price: 890, img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Louis Poulsen', name: 'PH 2/1 Table', desc: 'Cristal soplado, luz suave sin deslumbramiento', price: 1200, img: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Vibia', name: 'Flamingo Table', desc: 'LED, batería recargable, inalámbrica', price: 460, img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'colgantes': {
+            label: 'Colgantes',
+            items: [
+              { brand: 'Louis Poulsen', name: 'PH 5 Pendant', desc: 'El colgante más icónico de Poul Henningsen', price: 1800, img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge: 'CLÁSICO' },
+              { brand: 'Flos', name: 'IC Light Suspension', desc: 'Cristal soplado, estructura metálica minimalista', price: 1400, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Artemide', name: 'Pirce Suspension', desc: 'Aluminio lacado en espiral, luz LED indirecta', price: 2200, img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Vibia', name: 'Wireflow', desc: 'Estructura geométrica de cable, LED integrado', price: 3100, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+            ]
+          }
+        }
+      },
+
+      exterior: {
+        label: 'Exterior',
+        heroImg: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'jardin': {
+            label: 'Muebles de Jardín',
+            items: [
+              { brand: 'Kettal', name: 'Set Bitta', desc: 'Aluminio y teca, resistente a UV y agua', price: 3800, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80', badge: 'MÁS VENDIDO' },
+              { brand: 'Gloster', name: 'Emu 4-seater', desc: 'Tejido náutico, estructura de aluminio', price: 4200, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Tribu', name: 'Set Landscape', desc: 'Materiales naturales, colección sostenible', price: 5600, img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Gandia Blasco', name: 'Set Stack', desc: 'Apilable, tejido de fibra sintética premium', price: 2800, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'tumbonas': {
+            label: 'Tumbonas',
+            items: [
+              { brand: 'Kettal', name: 'Tumbona Bitta', desc: 'Aluminio lacado, colchoneta de tela náutica', price: 1800, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Tribu', name: 'Tumbona Versus', desc: 'Estructura de teca, respaldo regulable', price: 2200, img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge: 'EXCLUSIVO' },
+              { brand: 'Gandia Blasco', name: 'Tumbona Flat', desc: 'Ruedas integradas, colchoneta de 8cm', price: 1600, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Gloster', name: 'Tumbona Rattan', desc: 'Rattan sintético, resistente a rayos UV', price: 1400, img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+            ]
+          },
+          'mesas-ext': {
+            label: 'Mesas Exterior',
+            items: [
+              { brand: 'Kettal', name: 'Mesa Bitta', desc: 'Tablero de cerámica, base de aluminio', price: 2400, img: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge: 'NUEVO' },
+              { brand: 'Tribu', name: 'Mesa T-Table', desc: 'Teca maciza, tratamiento natural', price: 3100, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Gandia Blasco', name: 'Mesa Flat', desc: 'Acero inoxidable, compacta plegable', price: 1200, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+              { brand: 'Gloster', name: 'Mesa Grid', desc: 'Aluminio y HPL, varios tamaños', price: 1800, img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80' },
+            ]
+          }
+        }
+      },
+
+
+      marcas: {
+        label: 'Marcas',
+        heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop&q=80',
+        subcategories: {
+          'cassina': { label: 'Cassina', items: [] },
+          'bb-italia': { label: 'B&B Italia', items: [] },
+          'knoll': { label: 'Knoll', items: [] },
+          'fritz-hansen': { label: 'Fritz Hansen', items: [] },
+        }
+      }
+    };
+
+    // Agregar todos los productos de cada marca filtrando del catálogo
+    function buildBrandItems() {
+      const allItems = [];
+      for (const cat of Object.values(catalog)) {
+        for (const sub of Object.values(cat.subcategories)) {
+          if (sub.items) allItems.push(...sub.items);
+        }
+      }
+      const brandMap = {
+        'cassina': 'Cassina', 'bb-italia': 'B&B Italia',
+        'knoll': 'Knoll', 'fritz-hansen': 'Fritz Hansen'
+      };
+      for (const [key, brand] of Object.entries(brandMap)) {
+        catalog.marcas.subcategories[key].items = allItems.filter(p => p.brand === brand);
+      }
+    }
+    buildBrandItems();
+
+    /* ─── ESTADO (hash-based para compatibilidad con file://) ─── */
+    function readHash() {
+      const hash = window.location.hash.replace('#', '');
+      const parts = hash.split('/');
+      return { cat: parts[0] || 'sala', sub: parts[1] || null };
+    }
+    let { cat: _cat, sub: _sub } = readHash();
+    let currentCat = _cat;
+    let currentSub = _sub;
+    let currentItems = [];
+
+    /* ─── INICIALIZAR ─── */
+    function init() {
+      const cat = catalog[currentCat];
+      if (!cat) { currentCat = 'sala'; init(); return; }
+
+      // Título y breadcrumb
+      document.title = `Muebles Milano – ${cat.label}`;
+      document.getElementById('catTitle').textContent = cat.label.toUpperCase();
+      document.getElementById('catBreadcrumb').textContent = cat.label;
+      document.getElementById('catHeroImg').src = cat.heroImg;
+      document.getElementById('catHeroImg').alt = cat.label;
+
+      // Si no hay subcategoría en params, usar la primera
+      const subKeys = Object.keys(cat.subcategories);
+      if (!currentSub || !cat.subcategories[currentSub]) {
+        currentSub = subKeys[0];
+      }
+
+      renderTabs(cat, subKeys);
+      renderProducts(cat.subcategories[currentSub].items);
+    }
+
+    function renderTabs(cat, subKeys) {
+      const bar = document.getElementById('tabBar');
+      bar.innerHTML = '';
+      for (const key of subKeys) {
+        const sub = cat.subcategories[key];
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (key === currentSub ? ' active' : '');
+        btn.textContent = sub.label.toUpperCase();
+        btn.onclick = () => {
+          currentSub = key;
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderProducts(cat.subcategories[key].items);
+          window.history.replaceState({}, '', `#${currentCat}/${key}`);
+        };
+        bar.appendChild(btn);
+      }
+    }
+
+    function renderProducts(items) {
+      currentItems = [...items];
+      const grid = document.getElementById('productsGrid');
+      const count = document.getElementById('productCount');
+
+      count.textContent = `${items.length} PRODUCTO${items.length !== 1 ? 'S' : ''}`;
+
+      if (!items.length) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">SIN PRODUCTOS DISPONIBLES EN ESTA CATEGORÍA</div>';
+        return;
+      }
+
+      grid.innerHTML = items.map(p => `
+        <div class="product-card">
+          <div class="product-card-img-wrap">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" />
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+          </div>
+          <div class="product-info">
+            <span class="product-brand">${p.brand}</span>
+            <div class="product-name">${p.name}</div>
+            <div class="product-desc">${p.desc}</div>
+            <div class="product-price">$${p.price.toLocaleString('es-MX')}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function sortProducts() {
+      const val = document.getElementById('sortSelect').value;
+      let sorted = [...currentItems];
+      if (val === 'asc') sorted.sort((a, b) => a.price - b.price);
+      else if (val === 'desc') sorted.sort((a, b) => b.price - a.price);
+      else if (val === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name));
+      renderProducts(sorted);
+      currentItems = [...currentItems]; // restaurar referencia original para futuros ordenamientos
+    }
+
+    init();
+
+    window.addEventListener('hashchange', () => {
+      const h = readHash();
+      currentCat = h.cat;
+      currentSub = h.sub;
+      init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muebles Milano Admin – Panel de Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1b2140; --navy-dark: #131929; --navy-hover: #252d52;
+      --olive: #8c8b68; --olive-bright: #a3a27c; --olive-light: #f0efe8;
+      --white: #ffffff; --bg: #f0f0ed; --card: #ffffff;
+      --border: #e0e0dc; --gray: #888; --gray-light: #f4f4f2;
+      --red: #c0392b; --green: #27ae60;
+      --font: 'Montserrat', sans-serif;
+      --shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font); font-size: 13px; color: var(--navy); background: var(--bg); display: flex; flex-direction: column; }
+
+    /* ── TOP BAR ── */
+    #topbar {
+      background: var(--navy-dark); color: var(--white);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; height: 56px; flex-shrink: 0; z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo { width: 34px; height: 34px; }
+    .topbar-title { font-size: 11px; letter-spacing: 3px; font-weight: 600; color: var(--white); }
+    .topbar-subtitle { font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,.45); margin-top: 2px; }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn { font-family: var(--font); font-size: 10px; letter-spacing: 1.5px; font-weight: 500;
+           padding: 8px 18px; border-radius: 3px; cursor: pointer; border: none; transition: all .15s; }
+    .btn-primary { background: var(--olive-bright); color: var(--white); }
+    .btn-primary:hover { background: var(--olive); }
+    .btn-outline { background: transparent; color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.3); }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-danger:hover { background: #a93226; }
+    .btn-sm { padding: 5px 12px; font-size: 9px; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--navy); }
+    .btn-ghost:hover { border-color: var(--olive); color: var(--olive); }
+
+    /* ── LAYOUT ── */
+    #layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* ── SIDEBAR ── */
+    #sidebar {
+      width: 224px; flex-shrink: 0;
+      background: var(--navy); color: var(--white);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+    }
+    .sidebar-section-label {
+      font-size: 8px; letter-spacing: 3px; color: rgba(255,255,255,.35);
+      padding: 20px 20px 8px; font-weight: 500; text-transform: uppercase;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px; cursor: pointer; font-size: 10px; letter-spacing: 1.5px;
+      color: rgba(255,255,255,.65); transition: all .15s; border-left: 3px solid transparent;
+      font-weight: 400;
+    }
+    .sidebar-item:hover { background: var(--navy-hover); color: var(--white); }
+    .sidebar-item.active { background: rgba(163,162,124,.12); color: var(--olive-bright); border-left-color: var(--olive-bright); }
+    .sidebar-item .icon { font-size: 14px; width: 20px; text-align: center; }
+    .sidebar-divider { height: 1px; background: rgba(255,255,255,.08); margin: 8px 0; }
+    .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid rgba(255,255,255,.1); }
+    .sidebar-footer .btn { width: 100%; margin-bottom: 8px; text-align: center; display: block; padding: 9px; }
+    .sidebar-link { font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: 1px; cursor: pointer; text-align: center; display: block; margin-top: 4px; text-decoration: none; transition: color .15s; }
+    .sidebar-link:hover { color: rgba(255,255,255,.75); }
+
+    /* ── MAIN ── */
+    #main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+    .page-header { margin-bottom: 24px; }
+    .page-header h1 { font-size: 18px; letter-spacing: 2px; font-weight: 300; color: var(--navy); }
+    .page-header p { font-size: 11px; color: var(--gray); margin-top: 4px; letter-spacing: .5px; }
+
+    /* ── CARDS ── */
+    .card { background: var(--card); border-radius: 6px; box-shadow: var(--shadow); margin-bottom: 20px; }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .card-header h3 { font-size: 10px; letter-spacing: 2.5px; font-weight: 600; color: var(--navy); }
+    .card-header .badge { background: var(--olive-light); color: var(--olive); font-size: 9px; letter-spacing: 1px; padding: 3px 9px; border-radius: 20px; }
+    .card-body { padding: 20px; }
+
+    /* ── FORM ELEMENTS ── */
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 9px; letter-spacing: 2px; color: var(--gray); margin-bottom: 6px; font-weight: 500; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border); border-radius: 4px;
+      font-family: var(--font); font-size: 12px; color: var(--navy);
+      transition: border-color .15s; background: var(--white); resize: vertical;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none; border-color: var(--olive-bright);
+    }
+    .fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fields-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* ── IMAGE FIELD ── */
+    .img-field { display: grid; grid-template-columns: 1fr 140px; gap: 12px; align-items: start; }
+    .img-preview { width: 140px; height: 90px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); background: var(--gray-light); display: block; }
+    .img-preview-empty { width: 140px; height: 90px; border-radius: 4px; border: 1px dashed var(--border); background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 9px; letter-spacing: 1px; color: var(--gray); }
+
+    /* ── SUBCATEGORY BLOCK ── */
+    .sub-block { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+    .sub-block-header { background: var(--gray-light); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+    .sub-block-header h4 { font-size: 10px; letter-spacing: 2px; font-weight: 600; color: var(--navy); }
+    .sub-block-header .toggle { font-size: 16px; color: var(--gray); transition: transform .2s; }
+    .sub-block-header.open .toggle { transform: rotate(180deg); }
+    .sub-block-body { padding: 16px; display: none; }
+    .sub-block-body.open { display: block; }
+    .sub-separator { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ── PRODUCT CARD GRID (admin) ── */
+    .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+    .prod-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--white); display: flex; flex-direction: column; }
+    .prod-card-img-wrap { position: relative; }
+    .prod-card-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--gray-light); }
+    .prod-card-badge-lbl { position: absolute; top: 7px; left: 7px; background: var(--olive-bright); color: var(--white); font-size: 7px; letter-spacing: 1.5px; padding: 3px 8px; border-radius: 2px; }
+    .prod-card-body { padding: 10px 12px 6px; flex: 1; }
+    .prod-card-brand { font-size: 8px; letter-spacing: 2px; color: var(--olive); margin-bottom: 3px; }
+    .prod-card-name { font-size: 11px; color: var(--navy); line-height: 1.35; margin-bottom: 4px; font-weight: 500; }
+    .prod-card-desc { font-size: 10px; color: var(--gray); line-height: 1.5; margin-bottom: 6px; }
+    .prod-card-price { font-size: 12px; font-weight: 600; color: var(--navy); }
+    .prod-card-actions { display: grid; grid-template-columns: 1fr 36px; gap: 6px; padding: 8px 10px 10px; border-top: 1px solid var(--border); margin-top: 6px; }
+    .btn-edit-card { background: var(--navy); color: var(--white); border: none; border-radius: 3px; font-family: var(--font); font-size: 9px; letter-spacing: 1.5px; cursor: pointer; padding: 7px 10px; transition: background .15s; }
+    .btn-edit-card:hover { background: var(--olive); }
+    .btn-del-card { background: transparent; border: 1px solid #ffd0cc; color: var(--red); border-radius: 3px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+    .btn-del-card:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+    .add-product-row { padding: 12px 0 4px; }
+
+    /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 8px; width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,.25); }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 1; }
+    .modal-header h3 { font-size: 11px; letter-spacing: 2.5px; font-weight: 600; color: var(--navy); }
+    .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray); line-height: 1; padding: 2px 6px; }
+    .modal-close:hover { color: var(--navy); }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; position: sticky; bottom: 0; background: var(--white); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; top: 70px; right: 24px;
+      background: var(--green); color: var(--white);
+      padding: 12px 20px; border-radius: 4px;
+      font-size: 11px; letter-spacing: 1px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2);
+      transform: translateX(120%); transition: transform .3s ease;
+      z-index: 2000;
+    }
+    #toast.show { transform: translateX(0); }
+
+    /* ── UTILITIES ── */
+    .text-gray { color: var(--gray); }
+    .text-sm { font-size: 10px; letter-spacing: .5px; }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .empty-state { text-align: center; padding: 32px; color: var(--gray); font-size: 11px; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <div class="topbar-brand">
+      <svg class="topbar-logo" viewBox="0 0 60 60" fill="none">
+        <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div><div class="topbar-title">MUEBLES MILANO ADMIN</div><div class="topbar-subtitle">PANEL DE CONTROL</div></div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="openSite()">VER SITIO ↗</button>
+      <button class="btn btn-primary" onclick="saveAll()">GUARDAR CAMBIOS</button>
+    </div>
+  </header>
+
+  <div id="layout">
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sidebar-section-label">CONTENIDO</div>
+      <div class="sidebar-item active" data-section="general" onclick="setSection('general')">
+        <span class="icon">⚙</span> Textos Generales
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">CATEGORÍAS</div>
+      <div class="sidebar-item" data-section="sala" onclick="setSection('sala')">
+        <span class="icon">🛋</span> Sala de Estar
+      </div>
+      <div class="sidebar-item" data-section="comedor" onclick="setSection('comedor')">
+        <span class="icon">🪑</span> Comedor
+      </div>
+      <div class="sidebar-item" data-section="dormitorio" onclick="setSection('dormitorio')">
+        <span class="icon">🛏</span> Dormitorio
+      </div>
+      <div class="sidebar-item" data-section="iluminacion" onclick="setSection('iluminacion')">
+        <span class="icon">💡</span> Iluminación
+      </div>
+      <div class="sidebar-item" data-section="exterior" onclick="setSection('exterior')">
+        <span class="icon">🌿</span> Exterior
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-primary" onclick="saveAll()" style="width:100%;margin-bottom:8px">GUARDAR TODO</button>
+        <a class="sidebar-link" onclick="openSite()">Ver sitio ↗</a>
+        <a class="sidebar-link" onclick="resetAll()" style="color:rgba(255,80,80,.5);margin-top:6px">Resetear a valores por defecto</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main id="main"></main>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">EDITAR PRODUCTO</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveProduct()">Guardar Producto</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">✓ Cambios guardados correctamente</div>
+
+  <script>
+  /* ══════════════════════════════════════════
+     CATALOG DEFAULTS (espejo de index.html + homeImg por subcategoría)
+  ══════════════════════════════════════════ */
+  const DEFAULT_CATALOG = {
+    sala: {
+      label: 'Sala de Estar',
+      heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        sofas: { label: 'Sofás', homeImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Cassina', name:'Sofá Sengu 3 Plazas', desc:'Tapizado en bouclé natural, patas de roble', price:4200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Sofá Charles', desc:'Cuero plena flor, estructura metálica mate', price:6800, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Knoll', name:'Sofá Florence', desc:'Tejido lana, tapicería a medida', price:3900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Arflex', name:'Sofá Marenco', desc:'Espuma de alta densidad, icónico', price:5100, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Minotti', name:'Sofá Laurence', desc:'Velvet gris acero, diseño italiano', price:7200, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Poliform', name:'Sofá Park', desc:'Seccional modular, infinitas configuraciones', price:8900, img:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+        ]},
+        sillones: { label: 'Sillones', homeImg: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Fritz Hansen', name:'Egg Chair', desc:'Diseño de Arne Jacobsen, tapizado a elegir', price:3400, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Herman Miller', name:'Eames Lounge Chair', desc:'Cuero natural y nogal americano', price:4100, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Cassina', name:'LC2 Petit Confort', desc:'Le Corbusier, acero cromado', price:3800, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Arper', name:'Sillón Loom', desc:'Tejido natural, base en madera maciza', price:1800, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Ligne Roset', name:'Togo', desc:'Espuma integral, tapizado suave', price:2600, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'B&B Italia', name:'Fat-Fat', desc:'Patricia Urquiola, polipiel premium', price:2900, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        'mesas-centro': { label: 'Mesas de Centro', homeImg: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'B&B Italia', name:'Mesa Butterfly', desc:'Vidrio templado y acero lacado', price:1900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Cassina', name:'Mesa Accent', desc:'Mármol Calacatta, patas doradas', price:3200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Knoll', name:'Tulip Coffee Table', desc:'Base pedestal en aluminio blanco', price:1400, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Minotti', name:'Mesa Wedge', desc:'Nogal macizo, acabado natural', price:2100, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        estanterias: { label: 'Estanterías', homeImg: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Vitsoe', name:'Sistema 606', desc:'El sistema modular más icónico del siglo XX', price:2800, img:'https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Cassina', name:'Librería Infinito', desc:'Cerezo y acero, personalizable', price:4500, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'String', name:'String System', desc:'Diseño escandinavo, montaje mural', price:890, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'USM Haller', name:'USM Haller Shelving', desc:'Acero cromado, indestructible', price:3600, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+      }
+    },
+    comedor: {
+      label: 'Comedor',
+      heroImg: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        mesas: { label: 'Mesas de Comedor', homeImg: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Cassina', name:'Mesa À Quatre Mains', desc:'Nogal macizo, hasta 10 personas', price:5800, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Fritz Hansen', name:'Mesa Supercircular', desc:'Diseño de Piet Hein', price:3200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Knoll', name:'Mesa Saarinen Oval', desc:'Base tulipán en aluminio', price:2900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Poliform', name:'Mesa Concorde', desc:'Vidrio extra claro, acero inox', price:4100, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Mesa Maxalto', desc:'Fresno tintado, extensible hasta 3m', price:6200, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Arper', name:'Mesa Zef', desc:'Resina fenólica, base metálica', price:1800, img:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        sillas: { label: 'Sillas', homeImg: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Fritz Hansen', name:'Silla Series 7', desc:'La silla más vendida del mundo', price:890, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Cassina', name:'Silla 412 CAB', desc:'Cuero sellado, estructura de acero', price:1200, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Knoll', name:'Bertoia Side Chair', desc:'Varilla metálica, cojín incluido', price:760, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Vitra', name:'Hal Wood', desc:'Base roble, carcasa polipropileno', price:540, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Arper', name:'Catifa 46', desc:'Apilable, tapizado integral opcional', price:480, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Magis', name:'Chair One', desc:'Fundición de aluminio, apilable', price:620, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        aparadores: { label: 'Aparadores', homeImg: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Aparador Alambra', desc:'Lacado mate, herrajes dorados', price:3800, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Cassina', name:'Aparador 605', desc:'Nogal, patas metálicas altas', price:4600, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'B&B Italia', name:'Aparador Maxalto', desc:'Cerezo, interiores lacados', price:5100, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Minotti', name:'Aparador Sullivan', desc:'Metal, puertas de cristal ahumado', price:2900, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+      }
+    },
+    dormitorio: {
+      label: 'Dormitorio',
+      heroImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        camas: { label: 'Camas', homeImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Cama Letto Moderno', desc:'Cabecero tapizado, estructura de madera', price:4800, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'B&B Italia', name:'Cama Charles', desc:'Cabecero extragrande, base flotante', price:6200, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Cassina', name:'Cama Noctis', desc:'Apertura lateral, colchón incluido', price:5400, img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Minotti', name:'Cama Yang', desc:'Roble, tapizado en bouclé', price:7100, img:'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Flou', name:'Cama Nathalie', desc:'Tejido desmontable y lavable', price:3200, img:'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Ligne Roset', name:'Cama Topaze', desc:'Bajo al suelo, tapizado integral', price:2900, img:'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        mesitas: { label: 'Mesitas de Noche', homeImg: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Mesita Letto', desc:'Nogal, cajón push', price:980, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Minotti', name:'Mesita Yang', desc:'Tablero de mármol, base dorada', price:1400, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Mesita Maxalto', desc:'Lacada, múltiples acabados', price:1100, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Cassina', name:'Mesita Noctis', desc:'Compacta con estante y USB', price:860, img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        comodas: { label: 'Cómodas', homeImg: 'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Cómoda Senzafine', desc:'Lacada, tiradores de acero inox', price:2800, img:'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Minotti', name:'Cómoda Sullivan', desc:'4 cajones, tablero de mármol negro', price:3400, img:'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Ligne Roset', name:'Cómoda Trica', desc:'Roble, acabado natural', price:1900, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'B&B Italia', name:'Cómoda Maxalto', desc:'Cerezo, patas metálicas', price:4100, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        armarios: { label: 'Armarios', homeImg: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Armario Senzafine', desc:'Puertas correderas, interior personalizable', price:8900, img:'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Porro', name:'Armario Link', desc:'Modular, lacado o madera', price:6400, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Molteni', name:'Armario 505', desc:'Modulación libre, acabados premium', price:7200, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Rimadesio', name:'Armario Zenit', desc:'Puertas de cristal, aluminio anodizado', price:5800, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+      }
+    },
+    iluminacion: {
+      label: 'Iluminación',
+      heroImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        pie: { label: 'Lámparas de Pie', homeImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Artemide', name:'Tolomeo Lettura', desc:'Aluminio anodizado, brazo articulado', price:1140, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Flos', name:'Arco', desc:'Mármol de Carrara, ícono del diseño', price:2800, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Louis Poulsen', name:'Panthella Floor', desc:'Acrílico opal, base de acero', price:1900, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Oluce', name:'Atollo Floor', desc:'Aluminio blanco, Vico Magistretti', price:2100, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        mesa: { label: 'Lámparas de Mesa', homeImg: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Artemide', name:'Tolomeo Tavolo', desc:'Aluminio anodizado, brazo articulado', price:680, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Flos', name:'Kelvin LED', desc:'LED integrado, temperatura regulable', price:890, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Louis Poulsen', name:'PH 2/1', desc:'Cristal soplado, sin deslumbramiento', price:1200, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Vibia', name:'Flamingo Table', desc:'LED, batería recargable, inalámbrica', price:460, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        colgantes: { label: 'Colgantes', homeImg: 'https://images.unsplash.com/photo-1540039155733-44a4b5b58abb?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Louis Poulsen', name:'PH 5 Pendant', desc:'Icónico de Poul Henningsen', price:1800, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Flos', name:'IC Light Suspension', desc:'Cristal soplado, minimalista', price:1400, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Artemide', name:'Pirce Suspension', desc:'Aluminio en espiral, LED indirecta', price:2200, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Vibia', name:'Wireflow', desc:'Estructura geométrica de cable', price:3100, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+        ]},
+      }
+    },
+    exterior: {
+      label: 'Exterior',
+      heroImg: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        jardin: { label: 'Muebles de Jardín', homeImg: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Set Bitta', desc:'Aluminio y teca, resistente a UV', price:3800, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Gloster', name:'Set Emu 4', desc:'Tejido náutico, aluminio', price:4200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Tribu', name:'Set Landscape', desc:'Materiales naturales, sostenible', price:5600, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Gandia Blasco', name:'Set Stack', desc:'Apilable, fibra sintética premium', price:2800, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        tumbonas: { label: 'Tumbonas', homeImg: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Tumbona Bitta', desc:'Aluminio lacado, tela náutica', price:1800, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Tribu', name:'Tumbona Versus', desc:'Teca, respaldo regulable', price:2200, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Gandia Blasco', name:'Tumbona Flat', desc:'Ruedas integradas, colchoneta 8cm', price:1600, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Gloster', name:'Tumbona Rattan', desc:'Rattan sintético, resistente UV', price:1400, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+        'mesas-ext': { label: 'Mesas Exterior', homeImg: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Mesa Bitta', desc:'Cerámica, base de aluminio', price:2400, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Tribu', name:'Mesa T-Table', desc:'Teca maciza, tratamiento natural', price:3100, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Gandia Blasco', name:'Mesa Flat', desc:'Acero inoxidable, plegable', price:1200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'' },
+          { brand:'Gloster', name:'Mesa Grid', desc:'Aluminio y HPL, varios tamaños', price:1800, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'' },
+        ]},
+      }
+    },
+    }
+  };
+
+  const DEFAULT_TEXTS = {
+    announceBar: 'ENVÍO GRATIS EN PEDIDOS MAYORES A $2,000  |  VISITA NUESTRA SALA DE EXPOSICIÓN',
+    heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&auto=format&fit=crop&q=80',
+    heroPromoLabel: 'VENTA DE SOFÁS CAMA EN CUERO',
+    heroPromoSub: 'ACTIVA AHORA',
+    promoBannerLabel: 'COLECCIÓN EXCLUSIVA',
+    promoBannerTitle: 'DISEÑO SIN COMPROMISO',
+    promoBannerDesc: 'Cada pieza seleccionada para elevar tu espacio. Calidad artesanal, diseño intemporal.',
+  };
+
+  /* ══════════════════════════════════════════
+     STATE
+  ══════════════════════════════════════════ */
+  let catalog = {};
+  let texts = {};
+  let activeSection = 'general';
+  let editingCtx = null; // {catKey, subKey, itemIndex} or null for new
+
+  /* ══════════════════════════════════════════
+     LOAD / SAVE
+  ══════════════════════════════════════════ */
+  function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  function loadData() {
+    try {
+      const savedCatalog = localStorage.getItem('milano_catalog');
+      const savedTexts   = localStorage.getItem('milano_texts');
+      catalog = savedCatalog ? JSON.parse(savedCatalog) : deepClone(DEFAULT_CATALOG);
+      texts   = savedTexts   ? JSON.parse(savedTexts)   : deepClone(DEFAULT_TEXTS);
+    } catch(e) {
+      catalog = deepClone(DEFAULT_CATALOG);
+      texts   = deepClone(DEFAULT_TEXTS);
+    }
+  }
+
+  function saveAll() {
+    // Collect current form values before saving
+    collectFormValues();
+    localStorage.setItem('milano_catalog', JSON.stringify(catalog));
+    localStorage.setItem('milano_texts',   JSON.stringify(texts));
+    showToast('✓ Cambios guardados correctamente');
+  }
+
+  function resetAll() {
+    if (!confirm('¿Resetear todo a los valores originales? Se perderán todos los cambios.')) return;
+    localStorage.removeItem('milano_catalog');
+    localStorage.removeItem('milano_texts');
+    loadData();
+    renderSection(activeSection);
+    showToast('↺ Valores restaurados');
+  }
+
+  function openSite() {
+    saveAll();
+    window.open('index.html', '_blank');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  /* ══════════════════════════════════════════
+     COLLECT FORM VALUES (read inputs → state)
+  ══════════════════════════════════════════ */
+  function collectFormValues() {
+    // Collect texts
+    document.querySelectorAll('[data-text-key]').forEach(el => {
+      texts[el.dataset.textKey] = el.value;
+    });
+    // Collect category hero images
+    document.querySelectorAll('[data-hero-key]').forEach(el => {
+      catalog[el.dataset.heroKey].heroImg = el.value;
+    });
+    // Collect subcategory home images
+    document.querySelectorAll('[data-homeimg]').forEach(el => {
+      const [cat, sub] = el.dataset.homeimg.split('/');
+      if (catalog[cat] && catalog[cat].subcategories[sub]) {
+        catalog[cat].subcategories[sub].homeImg = el.value;
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════
+     NAVIGATION
+  ══════════════════════════════════════════ */
+  function setSection(key) {
+    collectFormValues(); // save current form before switching
+    activeSection = key;
+    document.querySelectorAll('.sidebar-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.section === key);
+    });
+    renderSection(key);
+  }
+
+  function renderSection(key) {
+    const main = document.getElementById('main');
+    if (key === 'general') {
+      main.innerHTML = renderGeneral();
+    } else if (catalog[key]) {
+      main.innerHTML = renderCategory(key);
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     RENDER: GENERAL
+  ══════════════════════════════════════════ */
+  function renderGeneral() {
+    return `
+      <div class="page-header">
+        <h1>Textos Generales</h1>
+        <p>Configura los textos y la imagen principal del inicio</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>BARRA DE ANUNCIO</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>TEXTO DEL ANUNCIO</label>
+            <input type="text" data-text-key="announceBar" value="${esc(texts.announceBar)}" placeholder="Texto de la barra superior" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>IMAGEN HERO (INICIO)</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>URL DE LA IMAGEN</label>
+            <div class="img-field">
+              <input type="text" data-text-key="heroImg" value="${esc(texts.heroImg)}"
+                placeholder="https://..." oninput="previewImg(this,'prev-hero')" />
+              <img id="prev-hero" class="img-preview" src="${esc(texts.heroImg)}" onerror="this.src=''" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>TEXTO PROMOCIONAL HERO</h3></div>
+        <div class="card-body">
+          <div class="fields-row">
+            <div class="field">
+              <label>TÍTULO PROMOCIONAL</label>
+              <input type="text" data-text-key="heroPromoLabel" value="${esc(texts.heroPromoLabel)}" />
+            </div>
+            <div class="field">
+              <label>SUBTÍTULO</label>
+              <input type="text" data-text-key="heroPromoSub" value="${esc(texts.heroPromoSub)}" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>BANNER CENTRAL PROMO</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>ETIQUETA SUPERIOR</label>
+            <input type="text" data-text-key="promoBannerLabel" value="${esc(texts.promoBannerLabel)}" />
+          </div>
+          <div class="field">
+            <label>TÍTULO PRINCIPAL</label>
+            <input type="text" data-text-key="promoBannerTitle" value="${esc(texts.promoBannerTitle)}" />
+          </div>
+          <div class="field">
+            <label>DESCRIPCIÓN</label>
+            <textarea data-text-key="promoBannerDesc" rows="3">${esc(texts.promoBannerDesc)}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ══════════════════════════════════════════
+     RENDER: CATEGORY
+  ══════════════════════════════════════════ */
+  function renderCategory(catKey) {
+    const cat = catalog[catKey];
+    const subBlocks = Object.entries(cat.subcategories).map(([subKey, sub]) =>
+      renderSubBlock(catKey, subKey, sub)
+    ).join('');
+
+    return `
+      <div class="page-header">
+        <h1>${cat.label}</h1>
+        <p>Edita la imagen hero, las tarjetas de categoría y los productos</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>IMAGEN HERO — ${cat.label.toUpperCase()}</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>URL DE LA IMAGEN (1600×800 recomendado)</label>
+            <div class="img-field">
+              <input type="text" data-hero-key="${catKey}" value="${esc(cat.heroImg)}"
+                placeholder="https://..." oninput="previewImg(this,'prev-hero-${catKey}')" />
+              <img id="prev-hero-${catKey}" class="img-preview" src="${esc(cat.heroImg)}" onerror="this.src=''" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>SUBCATEGORÍAS Y PRODUCTOS</h3>
+          <span class="badge">${Object.keys(cat.subcategories).length} subcategorías</span>
+        </div>
+        <div class="card-body" style="padding:12px">
+          ${subBlocks}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSubBlock(catKey, subKey, sub) {
+    const totalItems = sub.items ? sub.items.length : 0;
+    const cards = (sub.items || []).map((item, idx) => `
+      <div class="prod-card">
+        <div class="prod-card-img-wrap">
+          <img class="prod-card-thumb" src="${esc(item.img)}" onerror="this.src=''" alt="${esc(item.name)}" />
+          ${item.badge ? `<span class="prod-card-badge-lbl">${esc(item.badge)}</span>` : ''}
+        </div>
+        <div class="prod-card-body">
+          <div class="prod-card-brand">${esc(item.brand)}</div>
+          <div class="prod-card-name">${esc(item.name)}</div>
+          <div class="prod-card-desc">${esc(item.desc)}</div>
+          <div class="prod-card-price">$${Number(item.price).toLocaleString('es-MX')}</div>
+        </div>
+        <div class="prod-card-actions">
+          <button class="btn-edit-card" onclick="openProductModal('${catKey}','${subKey}',${idx})">✏ EDITAR</button>
+          <button class="btn-del-card" onclick="deleteProduct('${catKey}','${subKey}',${idx})" title="Eliminar producto">×</button>
+        </div>
+      </div>`).join('');
+
+    const blockId = `sub-${catKey}-${subKey}`;
+    return `
+      <div class="sub-block">
+        <div class="sub-block-header open" onclick="toggleSubBlock('${blockId}')">
+          <h4>${sub.label.toUpperCase()} <span class="text-gray" style="font-weight:300;font-size:9px;letter-spacing:1px;margin-left:8px">${totalItems} productos</span></h4>
+          <span class="toggle">▾</span>
+        </div>
+        <div class="sub-block-body open" id="${blockId}">
+          <div class="field">
+            <label>IMAGEN DE TARJETA (PÁGINA DE INICIO)</label>
+            <div class="img-field">
+              <input type="text" data-homeimg="${catKey}/${subKey}" value="${esc(sub.homeImg||'')}"
+                placeholder="https://..." oninput="previewImg(this,'prev-${catKey}-${subKey}')" />
+              <img id="prev-${catKey}-${subKey}" class="img-preview" src="${esc(sub.homeImg||'')}" onerror="this.src=''" />
+            </div>
+          </div>
+          <div class="sub-separator"></div>
+          ${totalItems === 0
+            ? '<div class="empty-state">Sin productos en esta subcategoría</div>'
+            : `<div class="prod-grid">${cards}</div>`}
+          <div class="add-product-row">
+            <button class="btn btn-ghost btn-sm" onclick="openProductModal('${catKey}','${subKey}',null)">+ AGREGAR PRODUCTO</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function toggleSubBlock(id) {
+    const body = document.getElementById(id);
+    const header = body.previousElementSibling;
+    body.classList.toggle('open');
+    header.classList.toggle('open');
+  }
+
+  /* ══════════════════════════════════════════
+     PRODUCT MODAL
+  ══════════════════════════════════════════ */
+  function openProductModal(catKey, subKey, itemIndex) {
+    collectFormValues();
+    editingCtx = { catKey, subKey, itemIndex };
+    const isNew = itemIndex === null;
+    const item = isNew
+      ? { brand:'', name:'', desc:'', price:0, img:'', badge:'' }
+      : { ...catalog[catKey].subcategories[subKey].items[itemIndex] };
+
+    const isCustomBadge = item.badge && !['NUEVO','EXCLUSIVO','CLÁSICO','MÁS VENDIDO',''].includes(item.badge);
+    document.getElementById('modalTitle').textContent = isNew ? 'NUEVO PRODUCTO' : 'EDITAR PRODUCTO';
+    document.getElementById('modalBody').innerHTML = `
+      <!-- Preview superior -->
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px;padding:16px;background:var(--gray-light);border-radius:6px">
+        <img id="m-img-prev" src="${esc(item.img)}" onerror="this.src=''"
+          style="width:100px;height:100px;object-fit:cover;border-radius:4px;border:1px solid var(--border);flex-shrink:0;background:#eee" />
+        <div>
+          <div style="font-size:8px;letter-spacing:2px;color:var(--olive);margin-bottom:4px" id="m-prev-brand">${esc(item.brand)||'MARCA'}</div>
+          <div style="font-size:14px;color:var(--navy);font-weight:500;line-height:1.3;margin-bottom:4px" id="m-prev-name">${esc(item.name)||'Nombre del producto'}</div>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:6px" id="m-prev-desc">${esc(item.desc)||'Descripción'}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy)" id="m-prev-price">${item.price ? '$'+Number(item.price).toLocaleString('es-MX') : '$0'}</div>
+        </div>
+      </div>
+
+      <div class="fields-row">
+        <div class="field">
+          <label>MARCA</label>
+          <input type="text" id="m-brand" value="${esc(item.brand)}" placeholder="Ej: Cassina"
+            oninput="document.getElementById('m-prev-brand').textContent=this.value||'MARCA'" />
+        </div>
+        <div class="field">
+          <label>PRECIO (USD)</label>
+          <input type="number" id="m-price" value="${item.price}" min="0" step="1"
+            oninput="document.getElementById('m-prev-price').textContent='$'+(parseFloat(this.value)||0).toLocaleString('es-MX')" />
+        </div>
+      </div>
+      <div class="field">
+        <label>NOMBRE DEL PRODUCTO</label>
+        <input type="text" id="m-name" value="${esc(item.name)}" placeholder="Ej: Sofá Sengu 3 Plazas"
+          oninput="document.getElementById('m-prev-name').textContent=this.value||'Nombre del producto'" />
+      </div>
+      <div class="field">
+        <label>DESCRIPCIÓN CORTA</label>
+        <input type="text" id="m-desc" value="${esc(item.desc)}" placeholder="Ej: Tapizado en bouclé natural, patas de roble"
+          oninput="document.getElementById('m-prev-desc').textContent=this.value||'Descripción'" />
+      </div>
+      <div class="field">
+        <label>URL DE IMAGEN</label>
+        <div class="img-field">
+          <input type="text" id="m-img" value="${esc(item.img)}" placeholder="https://images.unsplash.com/..."
+            oninput="document.getElementById('m-img-prev').src=this.value" />
+          <img class="img-preview" src="${esc(item.img)}" onerror="this.src=''" style="width:140px;height:90px" />
+        </div>
+      </div>
+      <div class="fields-row">
+        <div class="field">
+          <label>BADGE</label>
+          <select id="m-badge" onchange="document.getElementById('m-badge-custom-wrap').style.display=this.value==='custom'?'':'none'">
+            <option value="">Sin badge</option>
+            ${['NUEVO','EXCLUSIVO','CLÁSICO','MÁS VENDIDO'].map(b => `<option value="${b}" ${item.badge===b?'selected':''}>${b}</option>`).join('')}
+            <option value="custom" ${isCustomBadge?'selected':''}>Personalizado…</option>
+          </select>
+        </div>
+        <div class="field" id="m-badge-custom-wrap" style="${isCustomBadge?'':'display:none'}">
+          <label>TEXTO DEL BADGE</label>
+          <input type="text" id="m-badge-custom" value="${isCustomBadge?esc(item.badge):''}" placeholder="Ej: OFERTA" />
+        </div>
+      </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    editingCtx = null;
+  }
+
+  function saveProduct() {
+    if (!editingCtx) return;
+    const { catKey, subKey, itemIndex } = editingCtx;
+    const badgeEl = document.getElementById('m-badge');
+    const badge = badgeEl.value === 'custom'
+      ? (document.getElementById('m-badge-custom').value.trim() || '')
+      : badgeEl.value;
+
+    const item = {
+      brand: document.getElementById('m-brand').value.trim(),
+      name:  document.getElementById('m-name').value.trim(),
+      desc:  document.getElementById('m-desc').value.trim(),
+      price: parseFloat(document.getElementById('m-price').value) || 0,
+      img:   document.getElementById('m-img').value.trim(),
+      badge: badge,
+    };
+
+    if (!item.name) { alert('El nombre del producto es obligatorio'); return; }
+
+    const items = catalog[catKey].subcategories[subKey].items;
+    if (itemIndex === null) {
+      items.push(item);
+    } else {
+      items[itemIndex] = item;
+    }
+
+    closeModal();
+    renderSection(activeSection);
+    showToast(itemIndex === null ? '✓ Producto agregado' : '✓ Producto actualizado');
+  }
+
+  function deleteProduct(catKey, subKey, itemIndex) {
+    const item = catalog[catKey].subcategories[subKey].items[itemIndex];
+    if (!confirm(`¿Eliminar "${item.name}"?`)) return;
+    catalog[catKey].subcategories[subKey].items.splice(itemIndex, 1);
+    renderSection(activeSection);
+    showToast('✓ Producto eliminado');
+  }
+
+  /* ══════════════════════════════════════════
+     UTILITIES
+  ══════════════════════════════════════════ */
+  function previewImg(input, previewId) {
+    const img = document.getElementById(previewId);
+    if (img) img.src = input.value;
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+      .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ══════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════ */
+  loadData();
+  renderSection('general');
+  </script>
+</body>
+</html>

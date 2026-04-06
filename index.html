@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muebles Milano – Muebles & Interiorismo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --olive: #8c8b68; --olive-bright: #a3a27c;
+      --navy: #1b2140;  --navy-dark: #131929;
+      --white: #ffffff; --gray-light: #f4f4f2; --gray-mid: #888;
+      --font-sans: 'Montserrat', sans-serif;
+      --font-serif: 'Cormorant Garamond', serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); color: var(--navy); background: var(--white); }
+
+    /* ── ANNOUNCE BAR ── */
+    .announce-bar { background: var(--navy-dark); color: var(--white); text-align: center; padding: 9px 20px; font-size: 11px; letter-spacing: 2.5px; font-weight: 300; }
+
+    /* ── HEADER HERO (flotante) ── */
+    .site-header-hero {
+      position: absolute; top: 36px; left: 0; right: 0;
+      z-index: 100; display: flex; flex-direction: column;
+      align-items: center; padding: 24px 48px 0;
+    }
+
+    /* ── HEADER SÓLIDO (en vistas internas) ── */
+    .site-header-solid {
+      background: var(--navy-dark);
+      display: flex; flex-direction: column;
+      align-items: center; padding: 20px 48px 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .header-top { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .header-icons { display: flex; align-items: center; gap: 22px; }
+    .header-icons button { background: none; border: none; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+    .header-icons svg { width: 20px; height: 20px; stroke: var(--white); fill: none; stroke-width: 1.5; }
+
+    .logo-wrap { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
+    .logo-icon { width: 50px; height: 50px; flex-shrink: 0; }
+    .logo-name { color: var(--white); font-size: 24px; font-weight: 700; letter-spacing: 4px; line-height: 1; }
+    .logo-sub  { color: rgba(255,255,255,.7); font-size: 8.5px; font-weight: 300; letter-spacing: 2.5px; }
+
+    /* ── NAV ── */
+    .site-nav { margin-top: 18px; width: 100%; display: flex; justify-content: center; border-top: 1px solid rgba(255,255,255,.18); padding-top: 13px; }
+    .nav-item { position: relative; }
+    .nav-item > a, .nav-item > button {
+      color: var(--white); text-decoration: none; background: none; border: none;
+      font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; font-weight: 400;
+      padding: 6px 14px; display: flex; align-items: center; gap: 4px;
+      white-space: nowrap; cursor: pointer; transition: opacity .2s;
+    }
+    .nav-item > a:hover, .nav-item > button:hover { opacity: .65; }
+    .nav-item > button svg, .nav-item > a svg { width: 9px; height: 9px; stroke: var(--white); fill: none; stroke-width: 2; }
+    .dropdown { display: none; position: absolute; top: 100%; left: 0; background: var(--white); min-width: 190px; box-shadow: 0 8px 32px rgba(0,0,0,.14); z-index: 200; padding: 10px 0; }
+    .dropdown button { display: block; width: 100%; text-align: left; padding: 10px 22px; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; color: var(--navy); background: none; border: none; cursor: pointer; transition: background .15s, color .15s; }
+    .dropdown button:hover { background: var(--gray-light); color: var(--olive); }
+    .nav-item:hover .dropdown { display: block; }
+
+    /* ── VISTAS ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── HERO ── */
+    .hero { position: relative; width: 100%; height: 100vh; min-height: 620px; overflow: hidden; }
+    .hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: brightness(.55); }
+    .hero-announce { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(19,25,41,.93); display: flex; align-items: center; justify-content: space-between; padding: 28px 64px; }
+    .hero-announce .label { font-size: 20px; letter-spacing: 4px; color: var(--olive-bright); font-weight: 500; display: block; }
+    .hero-announce .sublabel { font-size: 13px; letter-spacing: 5px; color: var(--olive); font-weight: 300; display: block; margin-top: 5px; }
+    .btn-cta { background: var(--olive-bright); color: var(--white); border: none; padding: 14px 38px; border-radius: 40px; font-size: 10px; letter-spacing: 3px; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: background .2s, transform .2s; }
+    .btn-cta:hover { background: #b8b78e; transform: scale(1.03); }
+
+    /* ── HOME SECTIONS ── */
+    .cat-section { padding: 72px 64px 80px; }
+    .cat-section:nth-of-type(odd)  { background: var(--white); }
+    .cat-section:nth-of-type(even) { background: var(--gray-light); }
+    .cat-section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; padding-bottom: 16px; border-bottom: 1px solid #e0e0dc; max-width: 1300px; margin-left: auto; margin-right: auto; }
+    .cat-section-header h2 { font-size: 13px; letter-spacing: 6px; font-weight: 500; color: var(--navy); }
+    .cat-section-header button.ver-todo { font-size: 9px; letter-spacing: 2px; color: var(--olive); background: none; border: none; cursor: pointer; font-family: var(--font-sans); transition: color .2s; }
+    .cat-section-header button.ver-todo:hover { color: var(--navy); }
+    .cat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; max-width: 1300px; margin: 0 auto; }
+    .cat-cards.cols-3 { grid-template-columns: repeat(3,1fr); }
+    .cat-card { display: block; text-decoration: none; cursor: pointer; background: none; border: none; text-align: left; padding: 0; }
+    .cat-card-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
+    .cat-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .cat-card:hover .cat-card-img img { transform: scale(1.06); }
+    .cat-card span { display: block; font-size: 10px; letter-spacing: 3px; color: var(--navy); font-weight: 500; padding: 12px 0 0; font-family: var(--font-sans); transition: color .2s; }
+    .cat-card:hover span { color: var(--olive); }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner { background: var(--navy-dark); color: var(--white); display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 76px 40px; text-align: center; gap: 20px; }
+    .promo-label { font-size: 10px; letter-spacing: 5px; color: var(--olive-bright); font-weight: 400; }
+    .promo-banner h2 { font-size: clamp(28px,4vw,54px); letter-spacing: 5px; font-weight: 300; font-family: var(--font-serif); }
+    .promo-banner p { font-size: 12px; letter-spacing: 1.5px; color: rgba(255,255,255,.6); max-width: 480px; line-height: 2.2; }
+    .btn-outline { border: 1px solid rgba(255,255,255,.5); color: var(--white); background: none; padding: 14px 42px; font-size: 10px; letter-spacing: 3px; font-family: var(--font-sans); cursor: pointer; transition: background .2s, color .2s; margin-top: 10px; }
+    .btn-outline:hover { background: var(--white); color: var(--navy); }
+
+    /* ── CATEGORY VIEW ── */
+    .cat-hero { position: relative; height: 240px; overflow: hidden; }
+    .cat-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.45); }
+    .cat-hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .cat-breadcrumb { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,.6); }
+    .cat-breadcrumb button { background: none; border: none; color: rgba(255,255,255,.6); cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2px; }
+    .cat-breadcrumb button:hover { color: var(--white); }
+    .cat-view-title { font-size: clamp(28px,4vw,52px); font-family: var(--font-serif); color: var(--white); letter-spacing: 6px; font-weight: 300; }
+
+    .tab-bar { display: flex; justify-content: center; border-bottom: 1px solid #e0e0dc; background: var(--white); padding: 0 40px; flex-wrap: wrap; }
+    .tab-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 2.5px; color: var(--gray-mid); padding: 18px 20px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--navy); }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--olive-bright); font-weight: 500; }
+
+    .products-section { padding: 60px 60px 80px; background: var(--white); }
+    .products-meta { font-size: 10px; letter-spacing: 2px; color: var(--gray-mid); margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; max-width: 1300px; margin-left: auto; margin-right: auto; margin-bottom: 36px; }
+    .sort-select { font-family: var(--font-sans); font-size: 10px; letter-spacing: 1px; color: var(--navy); border: 1px solid #ddd; padding: 6px 12px; background: var(--white); cursor: pointer; }
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; max-width: 1300px; margin: 0 auto; }
+    .product-card { cursor: pointer; }
+    .product-card-img { position: relative; overflow: hidden; aspect-ratio: 3/3.5; background: var(--gray-light); }
+    .product-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .product-card:hover .product-card-img img { transform: scale(1.05); }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--olive-bright); color: var(--white); font-size: 8px; letter-spacing: 2px; padding: 4px 10px; }
+    .product-info { padding: 14px 0 0; }
+    .product-brand { font-size: 9px; letter-spacing: 2px; color: var(--olive); text-transform: uppercase; }
+    .product-name  { font-size: 13px; letter-spacing: .5px; margin: 5px 0 4px; color: var(--navy); }
+    .product-desc  { font-size: 10px; color: var(--gray-mid); letter-spacing: .5px; line-height: 1.7; margin-bottom: 8px; }
+    .product-price { font-size: 13px; color: var(--navy); font-weight: 500; }
+
+    /* ── FOOTER ── */
+    .site-footer { background: var(--navy-dark); color: rgba(255,255,255,.65); padding: 64px 64px 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 52px; }
+    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .footer-logo-icon { width: 38px; height: 38px; }
+    .footer-logo-name { color: var(--white); font-size: 15px; font-weight: 700; letter-spacing: 3px; display: block; line-height: 1; }
+    .footer-logo-sub  { color: rgba(255,255,255,.45); font-size: 8px; letter-spacing: 2px; font-weight: 300; }
+    .footer-brand p { font-size: 11px; letter-spacing: .5px; line-height: 2.1; max-width: 260px; }
+    .footer-col h4 { font-size: 10px; letter-spacing: 3px; color: var(--white); margin-bottom: 18px; font-weight: 500; }
+    .footer-col button { display: block; font-size: 11px; color: rgba(255,255,255,.55); background: none; border: none; cursor: pointer; font-family: var(--font-sans); margin-bottom: 10px; letter-spacing: .5px; transition: color .2s; text-align: left; }
+    .footer-col button:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px; font-size: 10px; letter-spacing: 1px; display: flex; justify-content: space-between; color: rgba(255,255,255,.35); }
+
+    /* ── HAMBURGER & CART BADGE ── */
+    .hamburger-btn { display: none; }
+    .cart-btn { position: relative; }
+    .cart-count { position: absolute; top: -5px; right: -7px; background: var(--olive-bright); color: var(--white); font-size: 8px; width: 17px; height: 17px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 600; }
+
+    /* ── MOBILE DRAWER (menú) ── */
+    .mob-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 500; }
+    .mob-overlay.open { display: block; }
+    .mob-drawer {
+      position: fixed; top: 0; left: 0; width: 300px; height: 100vh; max-width: 85vw;
+      background: var(--navy); z-index: 600; overflow-y: auto;
+      transform: translateX(-100%); transition: transform .3s ease; display: flex; flex-direction: column;
+    }
+    .mob-drawer.open { transform: translateX(0); }
+    .mob-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .mob-drawer-header span { font-size: 9px; letter-spacing: 3px; color: var(--white); font-weight: 500; }
+    .mob-close { background: none; border: none; color: rgba(255,255,255,.55); font-size: 24px; cursor: pointer; line-height: 1; }
+    .mob-cat { border-bottom: 1px solid rgba(255,255,255,.07); }
+    .mob-cat-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 22px; background: none; border: none; color: rgba(255,255,255,.7); font-family: var(--font-sans); font-size: 10px; letter-spacing: 2.5px; cursor: pointer; font-weight: 400; text-align: left; }
+    .mob-cat-btn:hover { color: var(--white); }
+    .mob-cat-btn svg { width: 9px; height: 9px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .2s; flex-shrink: 0; }
+    .mob-cat-btn.open svg { transform: rotate(180deg); }
+    .mob-subs { display: none; background: rgba(0,0,0,.25); }
+    .mob-subs.open { display: block; }
+    .mob-subs button { display: block; width: 100%; text-align: left; padding: 11px 22px 11px 36px; background: none; border: none; color: rgba(255,255,255,.45); font-family: var(--font-sans); font-size: 10px; letter-spacing: 1.5px; cursor: pointer; transition: color .15s; }
+    .mob-subs button:hover { color: var(--olive-bright); }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; }
+    .cart-overlay.open { display: block; }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; width: 400px; max-width: 100vw; height: 100vh;
+      background: var(--white); z-index: 600;
+      transform: translateX(100%); transition: transform .3s ease; display: flex; flex-direction: column;
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-drawer-hdr { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid #e0e0dc; }
+    .cart-drawer-hdr h3 { font-size: 11px; letter-spacing: 3px; font-weight: 500; color: var(--navy); }
+    .cart-x { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--gray-mid); line-height: 1; }
+    .cart-items-scroll { flex: 1; overflow-y: auto; }
+    .cart-item { display: flex; gap: 14px; padding: 18px 24px; border-bottom: 1px solid #f0f0ec; }
+    .cart-item-img { width: 70px; height: 70px; object-fit: cover; flex-shrink: 0; border-radius: 2px; background: var(--gray-light); }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-brand { font-size: 9px; letter-spacing: 1.5px; color: var(--olive); margin-bottom: 3px; }
+    .cart-item-name { font-size: 12px; color: var(--navy); line-height: 1.4; }
+    .cart-item-price { font-size: 12px; color: var(--navy); font-weight: 500; margin-top: 5px; }
+    .cart-item-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; background: none; cursor: pointer; font-size: 14px; color: var(--navy); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); }
+    .qty-val { font-size: 12px; min-width: 18px; text-align: center; }
+    .cart-rm { margin-left: auto; background: none; border: none; cursor: pointer; color: #ccc; font-size: 18px; transition: color .15s; line-height: 1; }
+    .cart-rm:hover { color: #c0392b; }
+    .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gray-mid); gap: 12px; }
+    .cart-empty svg { width: 42px; height: 42px; stroke: #ccc; fill: none; }
+    .cart-empty p { font-size: 10px; letter-spacing: 2px; }
+    .cart-ftr { padding: 20px 24px; border-top: 1px solid #e0e0dc; background: var(--gray-light); }
+    .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .cart-total-row span { font-size: 10px; letter-spacing: 2px; color: var(--navy); font-weight: 500; }
+    .cart-checkout { width: 100%; background: var(--navy-dark); color: var(--white); border: none; padding: 16px; font-family: var(--font-sans); font-size: 10px; letter-spacing: 3px; cursor: pointer; transition: background .2s; }
+    .cart-checkout:hover { background: var(--navy); }
+
+    /* ── PRODUCT ADD-TO-CART BUTTON ── */
+    .add-cart-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--navy-dark); color: var(--white); border: none; font-family: var(--font-sans); font-size: 9px; letter-spacing: 2px; cursor: pointer; opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s, background .2s; }
+    .product-card:hover .add-cart-btn { opacity: 1; transform: translateY(0); }
+    .add-cart-btn:hover { background: var(--olive); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .cat-section { padding: 56px 40px 60px; }
+      .products-grid { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 768px) {
+      .announce-bar { font-size: 9px; letter-spacing: 1px; padding: 8px 14px; }
+      .site-header-hero { padding: 12px 18px 0; top: 34px; }
+      .site-header-solid { padding: 12px 18px 0; }
+      .site-nav { display: none; }
+      .hamburger-btn { display: flex; }
+      .account-btn { display: none; }
+      .logo-name { font-size: 18px; letter-spacing: 3px; }
+      .logo-sub { display: none; }
+      .logo-icon { width: 34px; height: 34px; }
+      .hero { height: 100svh; min-height: 560px; }
+      .hero-announce { flex-direction: column; gap: 14px; padding: 20px 22px; text-align: center; }
+      .hero-announce .label { font-size: 15px; letter-spacing: 2px; }
+      .cat-section { padding: 40px 18px 48px; }
+      .cat-section-header { flex-direction: column; gap: 6px; align-items: flex-start; }
+      .cat-cards { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .cat-cards.cols-3 { grid-template-columns: repeat(2,1fr); }
+      .promo-banner { padding: 50px 22px; }
+      .products-section { padding: 32px 18px 52px; }
+      .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
+      .site-footer { padding: 44px 22px 22px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; }
+      .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+      .tab-bar { padding: 0 16px; }
+      .tab-btn { padding: 14px 12px; font-size: 9px; }
+      .cat-hero { height: 180px; }
+    }
+    @media (max-width: 480px) {
+      .cat-cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-announce .label { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="announceBar" class="announce-bar">ENVÍO GRATIS EN PEDIDOS MAYORES A $2,000 &nbsp;|&nbsp; VISITA NUESTRA SALA DE EXPOSICIÓN</div>
+
+  <!-- ── MOBILE MENU DRAWER ── -->
+  <div class="mob-overlay" id="mobOverlay" onclick="closeMobMenu()"></div>
+  <div class="mob-drawer" id="mobDrawer" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+    <div class="mob-drawer-header">
+      <span>MENÚ</span>
+      <button class="mob-close" onclick="closeMobMenu()" aria-label="Cerrar menú">×</button>
+    </div>
+    <nav>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="closeMobMenu();openCat('sala')">NUEVO</button>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('sala','sofas')">Sofás</button><button onclick="closeMobMenu();openCat('sala','sillones')">Sillones</button><button onclick="closeMobMenu();openCat('sala','mesas-centro')">Mesas de Centro</button><button onclick="closeMobMenu();openCat('sala','estanterias')">Estanterías</button></div>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">COMEDOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('comedor','mesas')">Mesas de Comedor</button><button onclick="closeMobMenu();openCat('comedor','sillas')">Sillas</button><button onclick="closeMobMenu();openCat('comedor','aparadores')">Aparadores</button></div>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">DORMITORIO <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('dormitorio','camas')">Camas</button><button onclick="closeMobMenu();openCat('dormitorio','mesitas')">Mesitas de Noche</button><button onclick="closeMobMenu();openCat('dormitorio','comodas')">Cómodas</button><button onclick="closeMobMenu();openCat('dormitorio','armarios')">Armarios</button></div>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('iluminacion','pie')">Lámparas de Pie</button><button onclick="closeMobMenu();openCat('iluminacion','mesa')">Lámparas de Mesa</button><button onclick="closeMobMenu();openCat('iluminacion','colgantes')">Colgantes</button></div>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="toggleMobCat(this)">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+        <div class="mob-subs"><button onclick="closeMobMenu();openCat('exterior','jardin')">Muebles de Jardín</button><button onclick="closeMobMenu();openCat('exterior','tumbonas')">Tumbonas</button><button onclick="closeMobMenu();openCat('exterior','mesas-ext')">Mesas Exterior</button></div>
+      </div>
+      <div class="mob-cat">
+        <button class="mob-cat-btn" onclick="closeMobMenu()">QUIÉNES SOMOS</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ── CART DRAWER ── -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+    <div class="cart-drawer-hdr">
+      <h3>CARRITO</h3>
+      <button class="cart-x" onclick="closeCart()" aria-label="Cerrar carrito">×</button>
+    </div>
+    <div class="cart-items-scroll" id="cartItemsWrap"></div>
+    <div class="cart-ftr" id="cartFtr">
+      <div class="cart-total-row">
+        <span>SUBTOTAL</span>
+        <span id="cartTotalAmt">$0</span>
+      </div>
+      <button class="cart-checkout">PROCEDER AL PAGO</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VISTA: INICIO
+  ══════════════════════════════════════════ -->
+  <div id="view-home" class="view active">
+
+    <!-- HERO con header flotante -->
+    <section class="hero">
+      <img id="heroImgEl" class="hero-bg" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&auto=format&fit=crop&q=80" alt="Sala moderna Muebles Milano" />
+
+      <header class="site-header-hero">
+        <div class="header-top">
+          <div class="header-icons">
+            <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="22" height="22" stroke="white" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+          </div>
+          <div class="logo-wrap" onclick="goHome()">
+            <svg class="logo-icon" viewBox="0 0 60 60" fill="none">
+              <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <div><div class="logo-name">MUEBLES MILANO</div><div class="logo-sub">muebles & interiorismo</div></div>
+          </div>
+          <div class="header-icons">
+            <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+            <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+          </div>
+        </div>
+        <nav class="site-nav" id="nav-home">
+          <div class="nav-item"><button onclick="openCat('sala')">NUEVO</button></div>
+          <div class="nav-item">
+            <button onclick="openCat('sala')">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('sala','sofas')">Sofás</button>
+              <button onclick="openCat('sala','sillones')">Sillones</button>
+              <button onclick="openCat('sala','mesas-centro')">Mesas de Centro</button>
+              <button onclick="openCat('sala','estanterias')">Estanterías</button>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button onclick="openCat('comedor')">COMEDOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('comedor','mesas')">Mesas de Comedor</button>
+              <button onclick="openCat('comedor','sillas')">Sillas</button>
+              <button onclick="openCat('comedor','aparadores')">Aparadores</button>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button onclick="openCat('dormitorio')">DORMITORIO <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('dormitorio','camas')">Camas</button>
+              <button onclick="openCat('dormitorio','mesitas')">Mesitas de Noche</button>
+              <button onclick="openCat('dormitorio','comodas')">Cómodas</button>
+              <button onclick="openCat('dormitorio','armarios')">Armarios</button>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button onclick="openCat('iluminacion')">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('iluminacion','pie')">Lámparas de Pie</button>
+              <button onclick="openCat('iluminacion','mesa')">Lámparas de Mesa</button>
+              <button onclick="openCat('iluminacion','colgantes')">Colgantes</button>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button onclick="openCat('exterior')">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('exterior','jardin')">Muebles de Jardín</button>
+              <button onclick="openCat('exterior','tumbonas')">Tumbonas</button>
+              <button onclick="openCat('exterior','mesas-ext')">Mesas Exterior</button>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button onclick="openCat('marcas')">MARCAS <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+            <div class="dropdown">
+              <button onclick="openCat('marcas','cassina')">Cassina</button>
+              <button onclick="openCat('marcas','bb-italia')">B&B Italia</button>
+              <button onclick="openCat('marcas','knoll')">Knoll</button>
+              <button onclick="openCat('marcas','fritz-hansen')">Fritz Hansen</button>
+            </div>
+          </div>
+          <div class="nav-item"><button>QUIÉNES SOMOS</button></div>
+        </nav>
+      </header>
+
+      <div class="hero-announce">
+        <div>
+          <span id="heroPromoLabel" class="label">VENTA DE SOFÁS CAMA EN CUERO</span>
+          <span id="heroPromoSub" class="sublabel">ACTIVA AHORA</span>
+        </div>
+        <button class="btn-cta" onclick="openCat('sala','sofas')">COMPRAR AHORA</button>
+      </div>
+    </section>
+
+    <!-- SALA -->
+    <section class="cat-section">
+      <div class="cat-section-header">
+        <h2>SALA DE ESTAR</h2>
+        <button class="ver-todo" onclick="openCat('sala')">Ver colección completa →</button>
+      </div>
+      <div class="cat-cards">
+        <button class="cat-card" onclick="openCat('sala','sofas')"><div class="cat-card-img"><img data-cat="sala" data-sub="sofas" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&auto=format&fit=crop&q=80" alt="Sofás"/></div><span>SOFÁS</span></button>
+        <button class="cat-card" onclick="openCat('sala','sillones')"><div class="cat-card-img"><img data-cat="sala" data-sub="sillones" src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&auto=format&fit=crop&q=80" alt="Sillones"/></div><span>SILLONES</span></button>
+        <button class="cat-card" onclick="openCat('sala','mesas-centro')"><div class="cat-card-img"><img data-cat="sala" data-sub="mesas-centro" src="https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=700&auto=format&fit=crop&q=80" alt="Mesas de Centro"/></div><span>MESAS DE CENTRO</span></button>
+        <button class="cat-card" onclick="openCat('sala','estanterias')"><div class="cat-card-img"><img data-cat="sala" data-sub="estanterias" src="https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=700&auto=format&fit=crop&q=80" alt="Estanterías"/></div><span>ESTANTERÍAS</span></button>
+      </div>
+    </section>
+
+    <!-- COMEDOR -->
+    <section class="cat-section">
+      <div class="cat-section-header">
+        <h2>COMEDOR</h2>
+        <button class="ver-todo" onclick="openCat('comedor')">Ver colección completa →</button>
+      </div>
+      <div class="cat-cards cols-3">
+        <button class="cat-card" onclick="openCat('comedor','mesas')"><div class="cat-card-img"><img data-cat="comedor" data-sub="mesas" src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=700&auto=format&fit=crop&q=80" alt="Mesas"/></div><span>MESAS DE COMEDOR</span></button>
+        <button class="cat-card" onclick="openCat('comedor','sillas')"><div class="cat-card-img"><img data-cat="comedor" data-sub="sillas" src="https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=700&auto=format&fit=crop&q=80" alt="Sillas"/></div><span>SILLAS</span></button>
+        <button class="cat-card" onclick="openCat('comedor','aparadores')"><div class="cat-card-img"><img data-cat="comedor" data-sub="aparadores" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&auto=format&fit=crop&q=80" alt="Aparadores"/></div><span>APARADORES</span></button>
+      </div>
+    </section>
+
+    <!-- DORMITORIO -->
+    <section class="cat-section">
+      <div class="cat-section-header">
+        <h2>DORMITORIO</h2>
+        <button class="ver-todo" onclick="openCat('dormitorio')">Ver colección completa →</button>
+      </div>
+      <div class="cat-cards">
+        <button class="cat-card" onclick="openCat('dormitorio','camas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="camas" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700&auto=format&fit=crop&q=80" alt="Camas"/></div><span>CAMAS</span></button>
+        <button class="cat-card" onclick="openCat('dormitorio','mesitas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="mesitas" src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&auto=format&fit=crop&q=80" alt="Mesitas"/></div><span>MESITAS DE NOCHE</span></button>
+        <button class="cat-card" onclick="openCat('dormitorio','comodas')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="comodas" src="https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=700&auto=format&fit=crop&q=80" alt="Cómodas"/></div><span>CÓMODAS</span></button>
+        <button class="cat-card" onclick="openCat('dormitorio','armarios')"><div class="cat-card-img"><img data-cat="dormitorio" data-sub="armarios" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&auto=format&fit=crop&q=80" alt="Armarios"/></div><span>ARMARIOS</span></button>
+      </div>
+    </section>
+
+    <section class="promo-banner">
+      <span id="promoBannerLabel" class="promo-label">COLECCIÓN EXCLUSIVA</span>
+      <h2 id="promoBannerTitle">DISEÑO SIN COMPROMISO</h2>
+      <p id="promoBannerDesc">Cada pieza seleccionada para elevar tu espacio. Calidad artesanal, diseño intemporal.</p>
+      <button class="btn-outline" onclick="openCat('sala')">EXPLORAR COLECCIÓN</button>
+    </section>
+
+    <!-- ILUMINACIÓN -->
+    <section class="cat-section">
+      <div class="cat-section-header">
+        <h2>ILUMINACIÓN</h2>
+        <button class="ver-todo" onclick="openCat('iluminacion')">Ver colección completa →</button>
+      </div>
+      <div class="cat-cards cols-3">
+        <button class="cat-card" onclick="openCat('iluminacion','pie')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="pie" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80" alt="Pie"/></div><span>LÁMPARAS DE PIE</span></button>
+        <button class="cat-card" onclick="openCat('iluminacion','mesa')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="mesa" src="https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=700&auto=format&fit=crop&q=80" alt="Mesa"/></div><span>LÁMPARAS DE MESA</span></button>
+        <button class="cat-card" onclick="openCat('iluminacion','colgantes')"><div class="cat-card-img"><img data-cat="iluminacion" data-sub="colgantes" src="https://images.unsplash.com/photo-1540039155733-44a4b5b58abb?w=700&auto=format&fit=crop&q=80" alt="Colgantes"/></div><span>COLGANTES</span></button>
+      </div>
+    </section>
+
+    <!-- EXTERIOR -->
+    <section class="cat-section">
+      <div class="cat-section-header">
+        <h2>EXTERIOR</h2>
+        <button class="ver-todo" onclick="openCat('exterior')">Ver colección completa →</button>
+      </div>
+      <div class="cat-cards cols-3">
+        <button class="cat-card" onclick="openCat('exterior','jardin')"><div class="cat-card-img"><img data-cat="exterior" data-sub="jardin" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format&fit=crop&q=80" alt="Jardín"/></div><span>MUEBLES DE JARDÍN</span></button>
+        <button class="cat-card" onclick="openCat('exterior','tumbonas')"><div class="cat-card-img"><img data-cat="exterior" data-sub="tumbonas" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=700&auto=format&fit=crop&q=80" alt="Tumbonas"/></div><span>TUMBONAS</span></button>
+        <button class="cat-card" onclick="openCat('exterior','mesas-ext')"><div class="cat-card-img"><img data-cat="exterior" data-sub="mesas-ext" src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=700&auto=format&fit=crop&q=80" alt="Mesas Ext"/></div><span>MESAS EXTERIOR</span></button>
+      </div>
+    </section>
+
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles & interiorismo</span></div>
+          </div>
+          <p>Muebles de diseño contemporáneo. Parte de Muebles Milano.</p>
+        </div>
+        <div class="footer-col">
+          <h4>COLECCIONES</h4>
+          <button onclick="openCat('sala')">Sala de Estar</button>
+          <button onclick="openCat('comedor')">Comedor</button>
+          <button onclick="openCat('dormitorio')">Dormitorio</button>
+          <button onclick="openCat('exterior')">Exterior</button>
+          <button onclick="openCat('iluminacion')">Iluminación</button>
+        </div>
+        <div class="footer-col">
+          <h4>INFORMACIÓN</h4>
+          <button>Sobre Nosotros</button>
+          <button>Sala de Exposición</button>
+          <button>Cuenta Profesional</button>
+          <button>Blog de Diseño</button>
+        </div>
+        <div class="footer-col">
+          <h4>AYUDA</h4>
+          <button>Contacto</button>
+          <button>Envíos y Devoluciones</button>
+          <button>Garantía</button>
+          <button>Financiamiento</button>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Muebles Milano. Todos los derechos reservados.</span>
+        <span>Muebles & Interiorismo</span>
+      </div>
+    </footer>
+  </div><!-- /view-home -->
+
+  <!-- ══════════════════════════════════════════
+       VISTA: CATEGORÍA
+  ══════════════════════════════════════════ -->
+  <div id="view-cat" class="view">
+
+    <!-- Header sólido -->
+    <header class="site-header-solid">
+      <div class="header-top">
+        <div class="header-icons">
+          <button class="hamburger-btn" onclick="openMobMenu()" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="22" height="22" stroke="white" fill="none" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <button aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+        </div>
+        <div class="logo-wrap" onclick="goHome()">
+          <svg class="logo-icon" viewBox="0 0 60 60" fill="none">
+            <path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#a3a27c" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <div><div class="logo-name">MUEBLES MILANO</div><div class="logo-sub">muebles & interiorismo</div></div>
+        </div>
+        <div class="header-icons">
+          <button class="account-btn" aria-label="Cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+          <button class="cart-btn" onclick="openCart()" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count"></span></button>
+        </div>
+      </div>
+      <nav class="site-nav">
+        <div class="nav-item"><button onclick="openCat('sala')">NUEVO</button></div>
+        <div class="nav-item">
+          <button onclick="openCat('sala')">SALA <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('sala','sofas')">Sofás</button>
+            <button onclick="openCat('sala','sillones')">Sillones</button>
+            <button onclick="openCat('sala','mesas-centro')">Mesas de Centro</button>
+            <button onclick="openCat('sala','estanterias')">Estanterías</button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button onclick="openCat('comedor')">COMEDOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('comedor','mesas')">Mesas de Comedor</button>
+            <button onclick="openCat('comedor','sillas')">Sillas</button>
+            <button onclick="openCat('comedor','aparadores')">Aparadores</button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button onclick="openCat('dormitorio')">DORMITORIO <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('dormitorio','camas')">Camas</button>
+            <button onclick="openCat('dormitorio','mesitas')">Mesitas de Noche</button>
+            <button onclick="openCat('dormitorio','comodas')">Cómodas</button>
+            <button onclick="openCat('dormitorio','armarios')">Armarios</button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button onclick="openCat('iluminacion')">ILUMINACIÓN <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('iluminacion','pie')">Lámparas de Pie</button>
+            <button onclick="openCat('iluminacion','mesa')">Lámparas de Mesa</button>
+            <button onclick="openCat('iluminacion','colgantes')">Colgantes</button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button onclick="openCat('exterior')">EXTERIOR <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('exterior','jardin')">Muebles de Jardín</button>
+            <button onclick="openCat('exterior','tumbonas')">Tumbonas</button>
+            <button onclick="openCat('exterior','mesas-ext')">Mesas Exterior</button>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button onclick="openCat('marcas')">MARCAS <svg viewBox="0 0 10 10"><polyline points="2,3 5,7 8,3"/></svg></button>
+          <div class="dropdown">
+            <button onclick="openCat('marcas','cassina')">Cassina</button>
+            <button onclick="openCat('marcas','bb-italia')">B&B Italia</button>
+            <button onclick="openCat('marcas','knoll')">Knoll</button>
+            <button onclick="openCat('marcas','fritz-hansen')">Fritz Hansen</button>
+          </div>
+        </div>
+        <div class="nav-item"><button>CUENTA PROFESIONAL</button></div>
+      </nav>
+    </header>
+
+    <div class="cat-hero">
+      <img id="catHeroImg" src="" alt="" />
+      <div class="cat-hero-content">
+        <p class="cat-breadcrumb"><button onclick="goHome()">Inicio</button> &nbsp;/&nbsp; <span id="catBreadcrumb"></span></p>
+        <h1 class="cat-view-title" id="catTitle"></h1>
+      </div>
+    </div>
+
+    <div class="tab-bar" id="tabBar"></div>
+
+    <section class="products-section">
+      <div class="products-meta">
+        <span id="productCount"></span>
+        <select class="sort-select" onchange="sortProducts(this.value)">
+          <option value="">ORDENAR POR</option>
+          <option value="asc">PRECIO: MENOR A MAYOR</option>
+          <option value="desc">PRECIO: MAYOR A MENOR</option>
+          <option value="name">NOMBRE A–Z</option>
+        </select>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <svg class="footer-logo-icon" viewBox="0 0 60 60" fill="none"><path d="M4,52 L4,24 L20,8 L34,24 L34,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/><path d="M24,52 L24,24 L40,8 L56,24 L56,52" stroke="#8c8b68" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <div><span class="footer-logo-name">MUEBLES MILANO</span><span class="footer-logo-sub">muebles & interiorismo</span></div>
+          </div>
+          <p>Muebles de diseño contemporáneo. Parte de Muebles Milano.</p>
+        </div>
+        <div class="footer-col"><h4>COLECCIONES</h4>
+          <button onclick="openCat('sala')">Sala de Estar</button>
+          <button onclick="openCat('comedor')">Comedor</button>
+          <button onclick="openCat('dormitorio')">Dormitorio</button>
+          <button onclick="openCat('exterior')">Exterior</button>
+          <button onclick="openCat('iluminacion')">Iluminación</button>
+        </div>
+        <div class="footer-col"><h4>INFORMACIÓN</h4><button>Sobre Nosotros</button><button>Sala de Exposición</button><button>Blog de Diseño</button></div>
+        <div class="footer-col"><h4>AYUDA</h4><button>Contacto</button><button>Envíos y Devoluciones</button><button>Garantía</button></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Muebles Milano. Todos los derechos reservados.</span>
+        <span>Muebles & Interiorismo</span>
+      </div>
+    </footer>
+  </div><!-- /view-cat -->
+
+  <script>
+  /* ══════════════════════════════════════════
+     CATÁLOGO
+  ══════════════════════════════════════════ */
+  const catalog = {
+    sala: {
+      label: 'Sala de Estar',
+      heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        sofas: { label: 'Sofás', homeImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Cassina', name:'Sofá Sengu 3 Plazas', desc:'Tapizado en bouclé natural, patas de roble', price:4200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Sofá Charles', desc:'Cuero plena flor, estructura metálica mate', price:6800, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Knoll', name:'Sofá Florence', desc:'Tejido lana, tapicería a medida', price:3900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Arflex', name:'Sofá Marenco', desc:'Espuma de alta densidad, icónico', price:5100, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Minotti', name:'Sofá Laurence', desc:'Velvet gris acero, diseño italiano', price:7200, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Poliform', name:'Sofá Park', desc:'Seccional modular, infinitas configuraciones', price:8900, img:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+        ]},
+        sillones: { label: 'Sillones', homeImg: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Fritz Hansen', name:'Egg Chair', desc:'Diseño de Arne Jacobsen, tapizado a elegir', price:3400, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Herman Miller', name:'Eames Lounge Chair', desc:'Cuero natural y nogal americano', price:4100, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Cassina', name:'LC2 Petit Confort', desc:'Le Corbusier, acero cromado', price:3800, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Arper', name:'Sillón Loom', desc:'Tejido natural, base en madera maciza', price:1800, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Ligne Roset', name:'Togo', desc:'Espuma integral, tapizado suave', price:2600, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'B&B Italia', name:'Fat-Fat', desc:'Patricia Urquiola, polipiel premium', price:2900, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        'mesas-centro': { label: 'Mesas de Centro', homeImg: 'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'B&B Italia', name:'Mesa Butterfly', desc:'Vidrio templado y acero lacado', price:1900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Cassina', name:'Mesa Accent', desc:'Mármol Calacatta, patas doradas', price:3200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Knoll', name:'Tulip Coffee Table', desc:'Base pedestal en aluminio blanco', price:1400, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Minotti', name:'Mesa Wedge', desc:'Nogal macizo, acabado natural', price:2100, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        estanterias: { label: 'Estanterías', homeImg: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Vitsoe', name:'Sistema 606', desc:'El sistema modular más icónico del siglo XX', price:2800, img:'https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Cassina', name:'Librería Infinito', desc:'Cerezo y acero, personalizable', price:4500, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80' },
+          { brand:'String', name:'String System', desc:'Diseño escandinavo, montaje mural', price:890, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+          { brand:'USM Haller', name:'USM Haller Shelving', desc:'Acero cromado, indestructible', price:3600, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+        ]},
+      }
+    },
+    comedor: {
+      label: 'Comedor',
+      heroImg: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        mesas: { label: 'Mesas de Comedor', homeImg: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Cassina', name:'Mesa À Quatre Mains', desc:'Nogal macizo, hasta 10 personas', price:5800, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Fritz Hansen', name:'Mesa Supercircular', desc:'Diseño de Piet Hein', price:3200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Knoll', name:'Mesa Saarinen Oval', desc:'Base tulipán en aluminio', price:2900, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Poliform', name:'Mesa Concorde', desc:'Vidrio extra claro, acero inox', price:4100, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Mesa Maxalto', desc:'Fresno tintado, extensible hasta 3m', price:6200, img:'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Arper', name:'Mesa Zef', desc:'Resina fenólica, base metálica', price:1800, img:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        sillas: { label: 'Sillas', homeImg: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Fritz Hansen', name:'Silla Series 7', desc:'La silla más vendida del mundo', price:890, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Cassina', name:'Silla 412 CAB', desc:'Cuero sellado, estructura de acero', price:1200, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Knoll', name:'Bertoia Side Chair', desc:'Varilla metálica, cojín incluido', price:760, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Vitra', name:'Hal Wood', desc:'Base roble, carcasa polipropileno', price:540, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Arper', name:'Catifa 46', desc:'Apilable, tapizado integral opcional', price:480, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Magis', name:'Chair One', desc:'Fundición de aluminio, apilable', price:620, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        aparadores: { label: 'Aparadores', homeImg: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Aparador Alambra', desc:'Lacado mate, herrajes dorados', price:3800, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Cassina', name:'Aparador 605', desc:'Nogal, patas metálicas altas', price:4600, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80' },
+          { brand:'B&B Italia', name:'Aparador Maxalto', desc:'Cerezo, interiores lacados', price:5100, img:'https://images.unsplash.com/photo-1493663284031-b7e3aaa4d3e8?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Minotti', name:'Aparador Sullivan', desc:'Metal, puertas de cristal ahumado', price:2900, img:'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=600&auto=format&fit=crop&q=80' },
+        ]},
+      }
+    },
+    dormitorio: {
+      label: 'Dormitorio',
+      heroImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        camas: { label: 'Camas', homeImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Cama Letto Moderno', desc:'Cabecero tapizado, estructura de madera', price:4800, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'B&B Italia', name:'Cama Charles', desc:'Cabecero extragrande, base flotante', price:6200, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Cassina', name:'Cama Noctis', desc:'Apertura lateral, colchón incluido', price:5400, img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Minotti', name:'Cama Yang', desc:'Roble, tapizado en bouclé', price:7100, img:'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Flou', name:'Cama Nathalie', desc:'Tejido desmontable y lavable', price:3200, img:'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Ligne Roset', name:'Cama Topaze', desc:'Bajo al suelo, tapizado integral', price:2900, img:'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        mesitas: { label: 'Mesitas de Noche', homeImg: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Mesita Letto', desc:'Nogal, cajón push', price:980, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Minotti', name:'Mesita Yang', desc:'Tablero de mármol, base dorada', price:1400, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'B&B Italia', name:'Mesita Maxalto', desc:'Lacada, múltiples acabados', price:1100, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Cassina', name:'Mesita Noctis', desc:'Compacta con estante y USB', price:860, img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        comodas: { label: 'Cómodas', homeImg: 'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Cómoda Senzafine', desc:'Lacada, tiradores de acero inox', price:2800, img:'https://images.unsplash.com/photo-1588046130851-a6f13b01c0b6?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Minotti', name:'Cómoda Sullivan', desc:'4 cajones, tablero de mármol negro', price:3400, img:'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Ligne Roset', name:'Cómoda Trica', desc:'Roble, acabado natural', price:1900, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'B&B Italia', name:'Cómoda Maxalto', desc:'Cerezo, patas metálicas', price:4100, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        armarios: { label: 'Armarios', homeImg: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Poliform', name:'Armario Senzafine', desc:'Puertas correderas, interior personalizable', price:8900, img:'https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Porro', name:'Armario Link', desc:'Modular, lacado o madera', price:6400, img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Molteni', name:'Armario 505', desc:'Modulación libre, acabados premium', price:7200, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Rimadesio', name:'Armario Zenit', desc:'Puertas de cristal, aluminio anodizado', price:5800, img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&auto=format&fit=crop&q=80' },
+        ]},
+      }
+    },
+    iluminacion: {
+      label: 'Iluminación',
+      heroImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        pie: { label: 'Lámparas de Pie', homeImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Artemide', name:'Tolomeo Lettura', desc:'Aluminio anodizado, brazo articulado', price:1140, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Flos', name:'Arco', desc:'Mármol de Carrara, ícono del diseño', price:2800, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Louis Poulsen', name:'Panthella Floor', desc:'Acrílico opal, base de acero', price:1900, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Oluce', name:'Atollo Floor', desc:'Aluminio blanco, Vico Magistretti', price:2100, img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        mesa: { label: 'Lámparas de Mesa', homeImg: 'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Artemide', name:'Tolomeo Tavolo', desc:'Aluminio anodizado, brazo articulado', price:680, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Flos', name:'Kelvin LED', desc:'LED integrado, temperatura regulable', price:890, img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f26?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Louis Poulsen', name:'PH 2/1', desc:'Cristal soplado, sin deslumbramiento', price:1200, img:'https://images.unsplash.com/photo-1616486886892-ff366aa18b5e?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Vibia', name:'Flamingo Table', desc:'LED, batería recargable, inalámbrica', price:460, img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        colgantes: { label: 'Colgantes', homeImg: 'https://images.unsplash.com/photo-1540039155733-44a4b5b58abb?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Louis Poulsen', name:'PH 5 Pendant', desc:'Icónico de Poul Henningsen', price:1800, img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80', badge:'CLÁSICO' },
+          { brand:'Flos', name:'IC Light Suspension', desc:'Cristal soplado, minimalista', price:1400, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Artemide', name:'Pirce Suspension', desc:'Aluminio en espiral, LED indirecta', price:2200, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Vibia', name:'Wireflow', desc:'Estructura geométrica de cable', price:3100, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+        ]},
+      }
+    },
+    exterior: {
+      label: 'Exterior',
+      heroImg: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        jardin: { label: 'Muebles de Jardín', homeImg: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Set Bitta', desc:'Aluminio y teca, resistente a UV', price:3800, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80', badge:'MÁS VENDIDO' },
+          { brand:'Gloster', name:'Set Emu 4', desc:'Tejido náutico, aluminio', price:4200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Tribu', name:'Set Landscape', desc:'Materiales naturales, sostenible', price:5600, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Gandia Blasco', name:'Set Stack', desc:'Apilable, fibra sintética premium', price:2800, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        tumbonas: { label: 'Tumbonas', homeImg: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Tumbona Bitta', desc:'Aluminio lacado, tela náutica', price:1800, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Tribu', name:'Tumbona Versus', desc:'Teca, respaldo regulable', price:2200, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80', badge:'EXCLUSIVO' },
+          { brand:'Gandia Blasco', name:'Tumbona Flat', desc:'Ruedas integradas, colchoneta 8cm', price:1600, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Gloster', name:'Tumbona Rattan', desc:'Rattan sintético, resistente UV', price:1400, img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&auto=format&fit=crop&q=80' },
+        ]},
+        'mesas-ext': { label: 'Mesas Exterior', homeImg: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=700&auto=format&fit=crop&q=80', items: [
+          { brand:'Kettal', name:'Mesa Bitta', desc:'Cerámica, base de aluminio', price:2400, img:'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&auto=format&fit=crop&q=80', badge:'NUEVO' },
+          { brand:'Tribu', name:'Mesa T-Table', desc:'Teca maciza, tratamiento natural', price:3100, img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Gandia Blasco', name:'Mesa Flat', desc:'Acero inoxidable, plegable', price:1200, img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80' },
+          { brand:'Gloster', name:'Mesa Grid', desc:'Aluminio y HPL, varios tamaños', price:1800, img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80' },
+        ]},
+      }
+    },
+    marcas: {
+      label: 'Marcas',
+      heroImg: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop&q=80',
+      subcategories: {
+        cassina:       { label: 'Cassina',      items: [] },
+        'bb-italia':   { label: 'B&B Italia',   items: [] },
+        knoll:         { label: 'Knoll',         items: [] },
+        'fritz-hansen':{ label: 'Fritz Hansen',  items: [] },
+      }
+    }
+  };
+
+  // ── Cargar overrides del admin (localStorage) ──
+  (function() {
+    try {
+      const savedCat = localStorage.getItem('milano_catalog');
+      if (savedCat) {
+        const overrides = JSON.parse(savedCat);
+        // Deep merge: apply saved subcategories and heroImg per category
+        for (const [catKey, catData] of Object.entries(overrides)) {
+          if (!catalog[catKey]) continue;
+          if (catData.heroImg) catalog[catKey].heroImg = catData.heroImg;
+          if (catData.label)   catalog[catKey].label   = catData.label;
+          if (catData.subcategories) {
+            for (const [subKey, subData] of Object.entries(catData.subcategories)) {
+              if (!catalog[catKey].subcategories[subKey]) continue;
+              if (subData.homeImg) catalog[catKey].subcategories[subKey].homeImg = subData.homeImg;
+              if (subData.label)   catalog[catKey].subcategories[subKey].label   = subData.label;
+              if (subData.items)   catalog[catKey].subcategories[subKey].items   = subData.items;
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  })();
+
+  // Poblar marcas
+  (function() {
+    const brandMap = { cassina:'Cassina', 'bb-italia':'B&B Italia', knoll:'Knoll', 'fritz-hansen':'Fritz Hansen' };
+    const all = [];
+    for (const cat of Object.values(catalog)) for (const sub of Object.values(cat.subcategories)) if (sub.items) all.push(...sub.items);
+    for (const [key, brand] of Object.entries(brandMap)) catalog.marcas.subcategories[key].items = all.filter(p => p.brand === brand);
+  })();
+
+  // ── Aplicar textos guardados del admin ──
+  (function() {
+    try {
+      const savedTexts = localStorage.getItem('milano_texts');
+      if (!savedTexts) return;
+      const t = JSON.parse(savedTexts);
+      if (t.announceBar)     document.getElementById('announceBar').textContent    = t.announceBar;
+      if (t.heroImg)         document.getElementById('heroImgEl').src               = t.heroImg;
+      if (t.heroPromoLabel)  document.getElementById('heroPromoLabel').textContent  = t.heroPromoLabel;
+      if (t.heroPromoSub)    document.getElementById('heroPromoSub').textContent    = t.heroPromoSub;
+      if (t.promoBannerLabel) document.getElementById('promoBannerLabel').textContent = t.promoBannerLabel;
+      if (t.promoBannerTitle) document.getElementById('promoBannerTitle').textContent = t.promoBannerTitle;
+      if (t.promoBannerDesc)  document.getElementById('promoBannerDesc').textContent  = t.promoBannerDesc;
+    } catch(e) {}
+  })();
+
+  // ── Aplicar imágenes de tarjetas de subcategoría ──
+  (function() {
+    document.querySelectorAll('[data-cat][data-sub]').forEach(img => {
+      const cat = img.dataset.cat, sub = img.dataset.sub;
+      const homeImg = catalog[cat] && catalog[cat].subcategories[sub] && catalog[cat].subcategories[sub].homeImg;
+      if (homeImg) img.src = homeImg;
+    });
+  })();
+
+  /* ══════════════════════════════════════════
+     NAVEGACIÓN
+  ══════════════════════════════════════════ */
+  let activeCat = null, activeSub = null, baseItems = [];
+
+  function goHome() {
+    document.getElementById('view-home').classList.add('active');
+    document.getElementById('view-cat').classList.remove('active');
+    window.scrollTo(0, 0);
+  }
+
+  function openCat(cat, sub) {
+    activeCat = cat;
+    const catData = catalog[cat];
+    if (!catData) return;
+    activeSub = sub || Object.keys(catData.subcategories)[0];
+
+    document.getElementById('view-home').classList.remove('active');
+    document.getElementById('view-cat').classList.add('active');
+
+    document.title = 'Muebles Milano – ' + catData.label;
+    document.getElementById('catHeroImg').src = catData.heroImg;
+    document.getElementById('catHeroImg').alt = catData.label;
+    document.getElementById('catTitle').textContent = catData.label.toUpperCase();
+    document.getElementById('catBreadcrumb').textContent = catData.label;
+
+    renderTabs(catData);
+    renderProducts(catData.subcategories[activeSub].items);
+    window.scrollTo(0, 0);
+  }
+
+  function renderTabs(catData) {
+    const bar = document.getElementById('tabBar');
+    bar.innerHTML = '';
+    for (const [key, sub] of Object.entries(catData.subcategories)) {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (key === activeSub ? ' active' : '');
+      btn.textContent = sub.label.toUpperCase();
+      btn.onclick = () => {
+        activeSub = key;
+        bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProducts(catData.subcategories[key].items);
+      };
+      bar.appendChild(btn);
+    }
+  }
+
+  function renderProducts(items) {
+    baseItems = [...items];
+    const grid = document.getElementById('productsGrid');
+    document.getElementById('productCount').textContent = items.length + ' PRODUCTO' + (items.length !== 1 ? 'S' : '');
+    grid.innerHTML = items.map((p, i) => `
+      <div class="product-card">
+        <div class="product-card-img">
+          <img src="${p.img}" alt="${p.name}" loading="lazy" />
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        </div>
+        <div class="product-info">
+          <div class="product-brand">${p.brand}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-price">$${p.price.toLocaleString('es-MX')}</div>
+          <button class="add-cart-btn" onclick="addToCart(${i})">AGREGAR AL CARRITO</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function sortProducts(val) {
+    let sorted = [...baseItems];
+    if (val === 'asc')  sorted.sort((a,b) => a.price - b.price);
+    if (val === 'desc') sorted.sort((a,b) => b.price - a.price);
+    if (val === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
+    renderProducts(sorted);
+  }
+
+  /* ══════════════════════════════════════════
+     MOBILE MENU
+  ══════════════════════════════════════════ */
+  function openMobMenu() {
+    document.getElementById('mobDrawer').classList.add('open');
+    document.getElementById('mobOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobMenu() {
+    document.getElementById('mobDrawer').classList.remove('open');
+    document.getElementById('mobOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function toggleMobCat(btn) {
+    const subs = btn.nextElementSibling;
+    btn.classList.toggle('open');
+    subs.classList.toggle('open');
+  }
+
+  /* ══════════════════════════════════════════
+     CARRITO
+  ══════════════════════════════════════════ */
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('milano_cart') || '[]'); } catch(e) {}
+
+  function openCart() {
+    document.getElementById('cartDrawer').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderCart();
+  }
+  function closeCart() {
+    document.getElementById('cartDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function addToCart(idx) {
+    const p = baseItems[idx];
+    if (!p) return;
+    const key = p.brand + '|' + p.name;
+    const existing = cart.find(i => i.key === key);
+    if (existing) { existing.qty++; }
+    else { cart.push({ key, brand: p.brand, name: p.name, price: p.price, img: p.img, qty: 1 }); }
+    saveCart(); updateCartBadge(); openCart();
+  }
+  function changeQty(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart(); updateCartBadge(); renderCart();
+  }
+  function removeItem(idx) {
+    cart.splice(idx, 1);
+    saveCart(); updateCartBadge(); renderCart();
+  }
+  function saveCart() { localStorage.setItem('milano_cart', JSON.stringify(cart)); }
+  function updateCartBadge() {
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    document.querySelectorAll('.cart-count').forEach(el => {
+      el.textContent = total;
+      el.style.display = total > 0 ? 'flex' : 'none';
+    });
+  }
+  function renderCart() {
+    const wrap = document.getElementById('cartItemsWrap');
+    if (!cart.length) {
+      wrap.innerHTML = `<div class="cart-empty">
+        <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <p>TU CARRITO ESTÁ VACÍO</p></div>`;
+      document.getElementById('cartTotalAmt').textContent = '$0';
+      return;
+    }
+    wrap.innerHTML = cart.map((item, i) => `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${item.img}" alt="${item.name}" />
+        <div class="cart-item-info">
+          <div class="cart-item-brand">${item.brand}</div>
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">$${(item.price * item.qty).toLocaleString('es-MX')}</div>
+          <div class="cart-item-row">
+            <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+            <button class="cart-rm" onclick="removeItem(${i})" title="Eliminar">×</button>
+          </div>
+        </div>
+      </div>`).join('');
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('cartTotalAmt').textContent = '$' + total.toLocaleString('es-MX');
+  }
+
+  // Inicializar badge al cargar
+  updateCartBadge();
+
+  // Escape cierra drawers
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeMobMenu(); closeCart(); }
+  });
+  </script>
+</body>
+</html>

@@ -820,17 +820,13 @@
   /* ══════════════════════════════════════════
      INIT
   ══════════════════════════════════════════ */
-  // Init with timeout fallback in case Supabase is slow/unreachable
-  Promise.race([
-    loadData(),
-    new Promise(resolve => setTimeout(() => {
-      if (!catalog || !Object.keys(catalog).length) {
-        catalog = deepClone(DEFAULT_CATALOG);
-        texts = deepClone(DEFAULT_TEXTS);
-      }
-      resolve();
-    }, 3000))
-  ]).then(() => renderSection('general'));
+  // Init: render immediately with defaults, then try Supabase
+  catalog = deepClone(DEFAULT_CATALOG);
+  texts = deepClone(DEFAULT_TEXTS);
+  renderSection('general');
+
+  // Then try to load from Supabase in background
+  loadData().then(() => renderSection(activeSection)).catch(() => {});
   </script>
 </body>
 </html>

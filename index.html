@@ -1207,9 +1207,13 @@
   }
 
   (async function initFromSupabase() {
-    await loadCatalogFromSupabase();
+    try {
+      await Promise.race([
+        (async () => { await loadCatalogFromSupabase(); await loadTextsFromSupabase(); })(),
+        new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000))
+      ]);
+    } catch(e) { console.warn('Supabase load skipped, using defaults'); }
     poblarMarcas();
-    await loadTextsFromSupabase();
     aplicarImagenes();
     renderShowcase('best');
   })();

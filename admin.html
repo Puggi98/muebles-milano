@@ -430,11 +430,19 @@
 
   async function loadData() {
     try {
-      const { data: catRow } = await supabase.from('catalog').select('data').eq('id', 1).single();
-      const { data: txtRow } = await supabase.from('texts').select('data').eq('id', 1).single();
-      catalog = (catRow && catRow.data) ? catRow.data : deepClone(DEFAULT_CATALOG);
-      texts   = (txtRow && txtRow.data) ? txtRow.data : deepClone(DEFAULT_TEXTS);
+      const { data: catRow, error: catErr } = await supabase.from('catalog').select('data').eq('id', 1).single();
+      const { data: txtRow, error: txtErr } = await supabase.from('texts').select('data').eq('id', 1).single();
+      catalog = (catRow && catRow.data && !catErr) ? catRow.data : deepClone(DEFAULT_CATALOG);
+      texts   = (txtRow && txtRow.data && !txtErr) ? txtRow.data : deepClone(DEFAULT_TEXTS);
+      // Auto-save defaults to Supabase if empty
+      if (!catRow || !catRow.data || catErr) {
+        await supabase.from('catalog').update({ data: catalog, updated_at: new Date().toISOString() }).eq('id', 1);
+      }
+      if (!txtRow || !txtRow.data || txtErr) {
+        await supabase.from('texts').update({ data: texts, updated_at: new Date().toISOString() }).eq('id', 1);
+      }
     } catch(e) {
+      console.warn('Supabase load failed, using defaults:', e);
       catalog = deepClone(DEFAULT_CATALOG);
       texts   = deepClone(DEFAULT_TEXTS);
     }
@@ -812,7 +820,17 @@
   /* ══════════════════════════════════════════
      INIT
   ══════════════════════════════════════════ */
-  loadData().then(() => renderSection('general'));
+  // Init with timeout fallback in case Supabase is slow/unreachable
+  Promise.race([
+    loadData(),
+    new Promise(resolve => setTimeout(() => {
+      if (!catalog || !Object.keys(catalog).length) {
+        catalog = deepClone(DEFAULT_CATALOG);
+        texts = deepClone(DEFAULT_TEXTS);
+      }
+      resolve();
+    }, 3000))
+  ]).then(() => renderSection('general'));
   </script>
 </body>
 </html>
